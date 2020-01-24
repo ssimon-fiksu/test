@@ -1,0 +1,18 @@
+<h1 mat-dialog-title>Account Funding</h1>
+<div class="dialog-container">
+<form class="example-form" (ngSubmit)="updateFunds()">
+  <mat-form-field>
+    <input placeholder="Funds Remaining" matInput value={{data.balance}} [disabled]=true>
+    <span matPrefix>$&nbsp;</span>
+  </mat-form-field>
+  <mat-form-field class="full-width">
+    <input required type="number" matInput placeholder="Add/Subtract Funds" [formControl]="fundsFormControl">
+    <span matPrefix>$&nbsp;</span>
+  </mat-form-field>
+  <div mat-dialog-actions>
+    <button mat-button type="button" [mat-dialog-close]>Cancel</button>
+    <button mat-button type="submit" *ngIf="!loading" color="primary" [disabled]="fundsFormControl.invalid || fundsFormControl.value == 0">Update</button>
+    <button mat-button type="button" *ngIf="loading" color="primary" [disabled]=true>Saving...</button>
+  </div>
+</form>
+</div>

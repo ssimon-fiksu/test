@@ -1,0 +1,74 @@
+<mat-toolbar color="primary">
+  <mat-toolbar-row>
+    <span>{{this.accid ? 'Edit' : 'Create'}} Account</span>
+  </mat-toolbar-row>
+</mat-toolbar>
+<app-spinner *ngIf="loading"></app-spinner>
+<div class="main-container"> 
+  <form [formGroup]="formGroup" novalidate (ngSubmit)="onSubmit(formGroup)" class="account-form" [ngClass]="{'disabled': loading}">
+    <mat-form-field class="full-width">
+      <input required matInput placeholder="App" aria-label="App" [matAutocomplete]="auto" formControlName="fiksu_app" [errorStateMatcher]="matcher">
+      <mat-error *ngIf="fiksu_app.hasError('required')">This field is required</mat-error>
+      <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayApp" >
+        <mat-option *ngFor="let app of apps | async" [value]="app">
+          <span>{{app.application_name}}</span>
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+    <mat-form-field class="full-width">
+      <input type="text" matInput placeholder="Account Name" aria-label="Account Name" required formControlName="account_name" [errorStateMatcher]="matcher">
+      <mat-error *ngIf="account_name.hasError('required')">This field is required</mat-error>
+    </mat-form-field>
+    <mat-form-field class="full-width">
+      <input type="text" matInput placeholder="Device Class" aria-label="Device Class" value="{{fiksu_app.value ? fiksu_app.value.device_class : ''}}" disabled />
+    </mat-form-field>
+    <mat-form-field class="full-width">
+      <input type="text" required matInput placeholder="App Domain URL" aria-label="App Domain URL" formControlName="adomain" [errorStateMatcher]="matcher" />
+      <mat-error *ngIf="adomain.hasError('required')">This field is required</mat-error>
+    </mat-form-field>
+    <mat-form-field class="full-width">
+      <input type="text" matInput placeholder="Advertiser (native ads)" aria-label="Advertiser (native ads)" formControlName="advertiser" />
+    </mat-form-field>
+    
+    <mat-form-field class="full-width">
+      <textarea matInput cdkTextareaAutosize #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="3" placeholder="Pixel Markup" aria-label="Pixel Markup" formControlName="third_party_impression_markup" [errorStateMatcher]="matcher"></textarea>
+      <mat-error *ngIf="third_party_impression_markup.hasError('pattern')">Pixel Markup should match pattern '&#60;img src="URL" /&#62;'</mat-error>
+    </mat-form-field>
+    
+    <mat-form-field class="full-width">
+      <input type="number" matInput placeholder="Min Allowed Age" aria-label="Min Allowed Age" required formControlName="min_allowed_age" [errorStateMatcher]="matcher">
+      <mat-error *ngIf="min_allowed_age.hasError('required')">This field is required</mat-error>
+      <mat-error *ngIf="min_allowed_age.hasError('max')">Max value can be 127</mat-error>
+    </mat-form-field>
+    <mat-form-field class="full-width">
+      <input type="number" matInput placeholder="Exploration Bid Percentage" aria-label="Exploration Bid Percentage" required formControlName="exploration_bid_percentage" [errorStateMatcher]="matcher">
+      <mat-error *ngIf="exploration_bid_percentage.hasError('required')">This field is required</mat-error>
+    </mat-form-field>
+    <mat-form-field class="full-width">
+      <input type="url" matInput placeholder="Impression Beacon" aria-label="Impression Beacon" formControlName="impression_beacon" [errorStateMatcher]="matcher">
+      <mat-error *ngIf="impression_beacon.hasError('pattern')">This field must be valid URL</mat-error>
+    </mat-form-field>
+    <mat-form-field  class="full-width">
+      <mat-label>Exchanges</mat-label>
+      <mat-select multiple formControlName="exchange_ids" #exSelect>
+        <mat-option *ngFor="let ex of exchanges" [value]="ex.public_identifier">{{ex.name}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <div class="full-width checkbox">
+      <mat-checkbox color="primary" formControlName="is_pacing_enabled">Pacing Enabled</mat-checkbox>
+    </div>
+    <mat-form-field class="full-width">
+      <input matInput readonly placeholder="Category Selection" value="Selected: {{category_ids.value && category_ids.value.length}} categories">
+    </mat-form-field>
+    <div class="categories">
+      <button disabled *ngIf="!fiksu_app.value" matTooltip="App should be chosen first" type="button" mat-stroked-button>Appstore Categories</button>
+      <button [disabled]="catsObj == undefined" type="button" [style.display]="!fiksu_app.value && cat.name == 'Appstore Categories' ? 'none' : 'block'" mat-stroked-button *ngFor="let cat of cats" (click)="openCategories(cat)">{{cat.name}}</button>
+    </div>
+    <div class="form-element">
+      <button type="submit" mat-raised-button color="primary" [disabled]="loading" class="button">Submit</button>
+      &nbsp;
+      <a mat-raised-button [routerLink]="['/accounts']" [disabled]="loading" queryParamsHandling="preserve">Cancel</a>
+    </div>
+
+  </form>
+</div>

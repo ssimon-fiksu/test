@@ -1,0 +1,96 @@
+<h1 mat-dialog-title>Add Product</h1>
+<div class="dialog-container">
+<mat-form-field class="full-width">
+  <mat-label>Type</mat-label>
+  <mat-select [(value)]="type" required>
+    <mat-option value="app">Application</mat-option>
+    <mat-option value="brand">Brand</mat-option>
+  </mat-select>
+</mat-form-field>
+<span *ngxPermissionsOnly="['application creator development']">
+  <mat-form-field class="full-width"  *ngIf="type == 'app'">
+    <mat-label>Release Mode</mat-label>
+    <mat-select [(value)]="mode" required>
+      <mat-option value="inStore">In Store</mat-option>
+      <mat-option value="inDev">In Development</mat-option>
+    </mat-select>
+  </mat-form-field>
+</span>
+<mat-form-field class="full-width" *ngIf="type == 'app'">
+  <mat-label>Platform</mat-label>
+  <mat-select [(value)]="platfrom" required (selectionChange)="category.setValue(null); bundle.setValue(null); region.setValue(null);">
+    <mat-option value="ios">iOS</mat-option>
+    <mat-option value="android">Android</mat-option>
+  </mat-select>
+</mat-form-field>
+<form [formGroup]="brandFormGroup" novalidate autocomplete="off" *ngIf="type == 'brand'">
+  <mat-form-field class="full-width">
+    <input type="text" required matInput placeholder="Brand Name" formControlName="brandname" [errorStateMatcher]="matcher">
+    <mat-error *ngIf="brandname.hasError('required')">This field is required</mat-error>
+  </mat-form-field>
+  <div mat-dialog-actions>
+    <button mat-button type="button" [mat-dialog-close]>Cancel</button>
+    <button mat-button type="submit" *ngIf="!loading" color="primary" [disabled]="brandFormGroup.invalid" (click)="confirmBrand()">Confirm</button>
+    <button mat-button type="buttom" *ngIf="loading" color="primary" [disabled]=true>...</button>
+  </div>
+</form>
+<form [formGroup]="inStoreformGroup" novalidate autocomplete="off" *ngIf="mode == 'inStore' && type == 'app'">
+  <mat-form-field class="full-width">
+    <input type="text" required matInput placeholder="Store URL" formControlName="storeurl" [errorStateMatcher]="matcher">
+    <mat-error *ngIf="storeurl.hasError('required')">This field is required</mat-error>
+    <mat-error *ngIf="storeurl.hasError('pattern')">This field must be an URL</mat-error>
+  </mat-form-field>
+  <div mat-dialog-actions>
+    <button mat-button type="button" [mat-dialog-close]>Cancel</button>
+    <button mat-button type="submit" *ngIf="!loading" color="primary" [disabled]="inStoreformGroup.invalid" (click)="confirmInstore()">Confirm</button>
+    <button mat-button type="buttom" *ngIf="loading" color="primary" [disabled]=true>...</button>
+  </div>
+</form>
+
+<form [formGroup]="inDevformGroup" novalidate autocomplete="off" *ngIf="mode == 'inDev' && type == 'app'">
+  <mat-form-field class="full-width">
+    <input type="text" required matInput placeholder="Product Name" formControlName="productname" [errorStateMatcher]="matcher">
+    <mat-error *ngIf="productname.hasError('required')">This field is required</mat-error>
+  </mat-form-field>
+  <mat-form-field class="full-width" *ngIf="platfrom == 'ios'">
+    <input type="text" required matInput placeholder="Bundle ID" formControlName="bundle" [errorStateMatcher]="matcher">
+    <mat-error *ngIf="!bundle.value">This field is required</mat-error>
+  </mat-form-field>
+  <mat-form-field class="full-width">
+    <input type="text" required matInput placeholder="Product ID in {{platfrom == 'ios' ? 'iTunes Store' : 'Google Play'}}" formControlName="productId" [errorStateMatcher]="matcher">
+    <mat-error *ngIf="productId.hasError('required')">This field is required</mat-error>
+  </mat-form-field>
+  <mat-form-field class="full-width" *ngIf="platfrom == 'ios'">
+    <input matInput required placeholder="Primary Region" aria-label="Primary Region" [matAutocomplete]="auto" formControlName="region" [errorStateMatcher]="matcher">
+    <mat-error *ngIf="!region.value">This field is required</mat-error>
+    <mat-autocomplete #auto="matAutocomplete" [displayWith]="displaySelect" >
+      <mat-option *ngFor="let country of countries | async" [value]="country">
+        <span>{{country.name}}</span>
+      </mat-option>
+    </mat-autocomplete>
+  </mat-form-field>
+  <mat-form-field class="full-width" *ngIf="platfrom == 'ios'">
+    <input matInput required placeholder="iTunes Store Category" aria-label="iTunes Store Category" [matAutocomplete]="auto" formControlName="category" [errorStateMatcher]="matcher">
+    <mat-error *ngIf="category.hasError('required')">This field is required</mat-error>
+    <mat-autocomplete #auto="matAutocomplete" [displayWith]="displaySelect" >
+      <mat-option *ngFor="let category of iosCategories | async" [value]="category">
+        <span>{{category.name}}</span>
+      </mat-option>
+    </mat-autocomplete>
+  </mat-form-field>
+  <mat-form-field class="full-width" *ngIf="platfrom == 'android'">
+    <input matInput required="platfrom == 'android'" placeholder="Google Play Category" aria-label="Google Play Category" [matAutocomplete]="auto" formControlName="category" [errorStateMatcher]="matcher">
+    <mat-error *ngIf="category.hasError('required')">This field is required</mat-error>
+    <mat-autocomplete #auto="matAutocomplete" [displayWith]="displaySelect" >
+      <mat-option *ngFor="let category of androidCategories | async" [value]="category">
+        <span>{{category.name}}</span>
+      </mat-option>
+    </mat-autocomplete>
+  </mat-form-field>
+  <div mat-dialog-actions>
+    <button mat-button type="button" [mat-dialog-close]>Cancel</button>
+    <button mat-button type="submit" *ngIf="!loading" color="primary" (click)="confirmIndev()">Confirm</button>
+    <button mat-button type="buttom" *ngIf="loading" color="primary" [disabled]=true>...</button>
+  </div>
+</form>
+</div>

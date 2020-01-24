@@ -1,0 +1,84 @@
+<div class="client-selector-header">
+  <mat-toolbar color="primary">
+    <mat-toolbar-row>
+      <div>Campaigns</div>
+    </mat-toolbar-row>
+  </mat-toolbar>
+  <app-client-selector></app-client-selector>
+</div>
+<div class="section main-container" *ngIf="selectedClient"> 
+  <app-advertiser-selector></app-advertiser-selector>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  <app-product-selector></app-product-selector>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  <!-- Status -->
+  <ng-container *ngIf="selectedAdv && selectedProduct && dataSource.data.length > 0">
+    <mat-form-field>
+      <mat-label>Status</mat-label>
+        <mat-select [(value)]="status" (selectionChange)="getCampaigns()" [disabled]="loading">
+          <mat-option value="active">Active</mat-option>
+          <mat-option value="inactive">Inactive</mat-option>
+          <mat-option value="archived">Archived</mat-option>
+        </mat-select>
+    </mat-form-field>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <!-- Name -->
+    <mat-form-field>
+      <input matInput #searchName (keyup)="applyFilter($event.target.value)" placeholder="Filter by name" [disabled]="loading">
+    </mat-form-field>
+
+    <!-- Create button -->
+    <div class="flex-right-align">
+      <button mat-raised-button [disabled]="loading" *ngxPermissionsOnly="['campaign creator']" color="primary" (click)="createNewCamp()">New Campaign</button>
+    </div>
+  </ng-container>
+</div>
+<app-spinner *ngIf="loading"></app-spinner>
+<div class="table-container">
+  <table *ngIf="!loading && dataSource.data.length > 0" mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8 main-table" matSortActive="name" matSortDirection="asc" matSortDisableClear="true">
+  <ng-container matColumnDef="name">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> Campaign </th>
+    <td mat-cell class="small-cell" *matCellDef="let camp">{{camp.name}}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="start_date">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header class="nowrap"> Period </th>
+    <td mat-cell class="small-cell nowrap" *matCellDef="let camp">{{camp.start_date}} - {{camp.end_date}}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="status">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>
+    <td mat-cell class="small-cell" *matCellDef="let camp">{{camp.status}}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="budget">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> Budget </th>
+    <td mat-cell class="small-cell" *matCellDef="let camp">${{camp.budget}}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="actions">
+    <th mat-header-cell *matHeaderCellDef>Actions</th>
+    <td mat-cell class="actions-cell" *matCellDef="let camp; let i = index">
+      <ng-container *ngxPermissionsOnly="['campaign editor']">
+        <mat-icon matTooltip="Edit" (click)="editCamp(camp)">edit</mat-icon>
+        <mat-icon matTooltip="Deactivate" *ngIf="camp.status == 'active'" (click)="updateCampStatus(camp.public_identifier, 'inactive')">pause</mat-icon>
+        <mat-icon matTooltip="Activate" *ngIf="camp.status == 'inactive'" (click)="updateCampStatus(camp.public_identifier, 'active')">play_arrow</mat-icon>
+        <mat-icon matTooltip="Archive" *ngIf="camp.status != 'archived'" (click)="updateCampStatus(camp.public_identifier, 'archived')">archive</mat-icon>
+        <mat-icon matTooltip="Return from archive" *ngIf="camp.status == 'archived'" (click)="updateCampStatus(camp.public_identifier, 'inactive')">unarchive</mat-icon>
+      </ng-container>
+      <mat-icon matTooltip="View" *ngxPermissionsOnly="['campaign viewer']" (click)="viewCamp(camp)">remove_red_eye</mat-icon>
+    </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+  <div *ngIf="!loading && dataSource.data.length === 0 && selectedProduct" class="call-to-action-card">
+    <img src="/assets/interaction.png" width="100" height="100" />
+    <div class="header">No campaigns. Please  create a new one.</div>
+    <button mat-raised-button *ngxPermissionsOnly="['campaign creator']" color="primary" (click)="createNewCamp()">New Campaign</button>
+  </div>
+  <div *ngIf="!selectedProduct || !selectedAdv" class="call-to-action-card">
+    <div class="header">Please select Advertiser and Product first.</div>
+  </div>
+</div>

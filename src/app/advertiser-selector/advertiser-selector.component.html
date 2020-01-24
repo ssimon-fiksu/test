@@ -1,0 +1,10 @@
+  <!-- Advertiser -->
+  <mat-form-field>
+    <mat-label>{{loading ? 'Loading...' : 'Select Advertiser'}}</mat-label>
+    <mat-select [(ngModel)]="selectedAdv" (ngModelChange)="advChanged()" [disabled]="loading">
+      <mat-option *ngIf="advsData.length == 0">No Advertisers</mat-option>
+      <mat-option *ngFor="let adv of advsData" [value]="adv">
+        {{adv.name}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>

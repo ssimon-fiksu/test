@@ -1,0 +1,455 @@
+body {
+  font-family: "Open Sans","Helvetica Neue","Helvetica","Arial","sans-serif";
+  margin: 0;
+  padding: 0;
+}
+.mat-snack-bar-container {
+  background: rgba(230, 0, 0, 0.5);
+}
+
+app-product-selector {
+    margin-left: 8px;
+    width: 220px;
+    min-width: 220px;
+
+}
+
+.product-selector-header {
+  display: flex;
+  padding: 10px;
+  .ng-select.product-select {
+    margin-top: 20px;
+    padding-bottom: 0px;
+  }
+  .ng-dropdown-panel {
+    margin-top: 20px;
+    width: 350px;
+    left: auto;
+    right: 0;
+  }
+  .ng-select.product-select  .ng-option {
+      min-height: 2em;
+      line-height: 2em;
+      span {
+
+      }
+  }
+  .ng-select.product-select   .ng-select-container  {            
+    min-height: 45px;
+  }
+  .ng-input input{
+    font-size: 16px;
+  }
+}
+
+.mat-toolbar-row {
+  justify-content: space-between;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+.section {
+  display: flex;
+  align-content: center;
+  align-items: center;
+  height: 60px;
+}
+
+.main-container {
+  padding: 10px;
+  margin-right: 10px;
+}
+
+.main-container form {
+  margin-top: 10px;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.flex-right-align {
+  flex: 1;
+  text-align: right;
+}
+
+h1 {
+    font-size: 38.5px;
+}
+h1, h2, h3 {
+    line-height: 40px;
+}
+
+#true {
+  height: 30px;
+  &.opened {
+    height: auto;
+    .mat-line {
+      margin-top: 7px;
+    }
+    .sub {
+      margin-top: 0;
+      margin-left: 0;
+    }
+  }
+  &.mat-list-option .mat-pseudo-checkbox {
+    position: absolute;
+    top: 6px;
+    left: 16px;
+  }
+  &.placements-categories.mat-list-option .mat-pseudo-checkbox {
+    right: 16px;
+    left: auto;
+  }
+  .mat-list-option.sub .mat-pseudo-checkbox {
+    position: relative;
+    top: 0;
+    left: 0;
+  }
+
+  &.placements-categories.mat-list-option.sub .mat-pseudo-checkbox {
+    right: 0;
+    left: auto;
+  }
+
+  .mat-list-item-content {
+    padding: 0 16px;
+  }
+  .mat-list-text {
+    margin-top: 2px;
+  }
+  .mat-line {
+    margin-left: 16px;
+  }
+  &.placements-categories .mat-line {
+    margin-left: 0;
+  }
+}
+
+.mat-pseudo-checkbox-checked {
+  background: #445e7a;
+}
+
+app-spinner {
+    left: 50%;
+    transform: translateX(-50%);
+    position: fixed;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.6);
+    z-index: 1;
+    text-align: center;
+}
+
+table {
+  width: 100%;
+}
+
+.main-table {
+  border-left-style: solid;
+  border-left-width: 1px;
+  border-left-color: rgba(0, 0, 0, 0.12);
+  width: 100%;
+
+th.mat-header-cell {
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: rgba(0, 0, 0, 0.12);
+}
+
+  box-shadow: none;
+  th.mat-sort-header-sorted {
+    color: black;
+  }
+
+  .small-cell {
+    width: 1px;
+  }
+
+  .actions-cell {
+    width: 1px;
+    min-width: 1px;
+    max-width: 1px;
+    white-space: nowrap;
+  }
+
+  td.mat-cell.align-left {
+    text-align: left;
+  }
+
+  .mat-header-cell.nowrap, .mat-cell.nowrap {
+    white-space: nowrap;
+  }
+
+  .material-icons {
+    cursor: pointer;
+  }
+
+  .total-header-row .mat-header-cell {
+      background: rgb(240, 248, 255);
+      color: rgb(0, 0, 0);
+  }
+
+  .icon-link {
+    color: black;
+  }
+
+  td.mat-cell:first-of-type, td.mat-footer-cell:first-of-type, th.mat-header-cell:first-of-type {
+      padding-left: 7px;
+  }
+  td.mat-cell, td.mat-footer-cell, th.mat-header-cell {
+    text-align: center;
+    border-right-width: 1px;
+    border-right-style: solid;
+    border-right-color: rgba(0,0,0,.12);
+    padding: 7px;
+  }
+}
+
+#daterange .mat-form-field-label-wrapper {
+  display: none;
+}
+
+#daterange .ngx-mat-drp-date-input {
+  color: black;
+  cursor: pointer;
+}
+
+.ngx-mat-drp-calendar-container {
+  height: 354px!important;
+}
+
+.table-container {
+  display: flex;
+  flex-direction: column;
+  overflow: auto;
+  padding: 10px;
+  margin-right: 10px;
+}
+
+.acc-info {
+  .mat-form-field-wrapper {
+    padding-bottom: 8px;
+  }
+  .mat-form-field-underline {
+    display: none;
+  }
+  .mat-form-field-infix {
+    display: flex;
+    padding: 0;
+    border-top: none;
+    .input-wrap {
+      width: 168px;
+      font-weight: 500;
+      margin-left: auto;
+      input, mat-checkbox {
+        width: 120px;
+      }
+      .mat-icon-button {
+        line-height: 14px;
+        width: 14px;
+        height: 14px;
+        .mat-icon {
+          height: 14px;
+          line-height: 10px;
+          width: 14px;
+          font-size: 18px;
+        }
+      }
+    }
+    label {    margin-right: 13px;}
+  }
+}
+
+.ng-select .ng-select-container {
+  color: rgb(51, 51, 51);
+}
+
+.ng-select.ng-select-multiple .ng-select-container .ng-value-container {
+  padding-top: 5px;
+  .ng-value {
+    background-color: rgb(235, 245, 255);
+    color: rgb(51, 51, 51);
+    .ng-value-icon.left {
+      border-right: 1px solid rgb(184, 219, 255);
+      color: rgb(51, 51, 51);
+    }
+    .ng-value-icon, .ng-value-label {
+      display: inline-block;
+      padding: 1px 5px;
+      cursor: pointer;
+    }
+  }
+}
+
+.targeting-dialog .mat-dialog-container {
+  overflow: unset;
+}
+
+#audience-target {
+  .radio-group {
+    display: flex;
+    flex-direction: row;
+    margin: 14px 0;
+    flex-wrap: wrap;
+  }
+
+  .radio-button {
+    margin: 5px;
+    flex-grow: 1;
+    min-width: 180px;
+  }
+}
+
+#camp-perf-table, #adv-table, #order-table {
+  .mat-sort-header-container {
+    justify-content: center;
+  }
+}
+#pacing-check {
+  margin-bottom: 3px;
+  .mat-checkbox-inner-container {
+    margin-left: 85px;
+  }
+}
+
+app-client-selector {
+    margin-left: 8px;
+    width: 220px;
+    min-width: 220px;
+}
+
+.client-selector-header {
+  display: flex;
+  padding: 10px;
+  .ng-select.client-select {
+    margin-top: 20px;
+    padding-bottom: 0px;
+  }
+  .ng-dropdown-panel {
+    margin-top: 20px;
+    width: 350px;
+    left: auto;
+    right: 0;
+  }
+  .ng-select.client-select  .ng-option {
+      min-height: 2em;
+      line-height: 2em;
+      span {
+
+      }
+  }
+  .ng-select.client-select   .ng-select-container  {            
+    min-height: 45px;
+  }
+  .ng-input input{
+    font-size: 16px;
+  }
+}
+
+.call-to-action-card {
+  border: solid rgb(211, 218, 227) 1px;
+  width: 60%;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 36px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 30px;
+  .header {
+    width: 80%;
+    margin-top: 20px;
+    margin-bottom: 16px;
+    text-align: center;
+    font-size: 22px;
+  }
+}
+
+.muted {
+  color: rgb(145, 161, 179);
+}
+.mat-sort-header-container {
+  justify-content: center;
+}
+.md-button {
+  line-height: 30px!important;
+  font-size: 12px;
+}
+.show-on-hover-container .show-on-hover{
+  display: none;
+}
+.show-on-hover-container:hover .show-on-hover, .show-partners {
+  display: inline;
+}
+
+tr:hover {
+  td {
+      background-color: rgba(0,131,193,0.1);
+    }
+}
+
+.call-to-action-card {
+  border: solid rgb(211, 218, 227) 1px;
+  width: 60%;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 36px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 30px;
+  .header {
+    width: 80%;
+    margin-top: 20px;
+    margin-bottom: 16px;
+    text-align: center;
+    font-size: 22px;
+  }
+}
+
+.min-width-column {
+  white-space: nowrap;
+  width: 135px;
+  max-width: 135px;
+  min-width: 135px;
+}
+
+.syn-button {
+  border: 1px solid lightgray!important;
+}
+
+.overflow-dialog {
+  overflow: auto;
+}
+
+.ng-select.ng-select-multiple .ng-select-container.ng-has-value .ng-value-container {
+    padding-top: 0.45em!important;
+}
+
+.check-inc-excl .mat-list-item-content {
+  justify-content: center;
+}
+
+
+.view {
+  .mat-form-field-underline, .ng-select-container:after {
+    background-color: rgba(0, 0, 0, 0.42)!important;
+    background-image: none!important;
+  }
+  .mat-select-value, .mat-checkbox-label {
+    color: black!important;
+  }
+  .mat-select-arrow, .ng-arrow {
+    color: rgb(255, 255, 255)!important;
+  }
+  &.ng-select .ng-value {
+    background-color: rgb(235, 245, 255)!important;
+    color: rgb(51, 51, 51)!important;
+  }
+}

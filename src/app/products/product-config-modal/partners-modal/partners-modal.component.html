@@ -1,0 +1,28 @@
+<h1 mat-dialog-title>Tracking Partner</h1>
+<div class="dialog-container">
+  <form class="example-form" *ngIf="!showForm">
+    <mat-form-field style="width: 50%">
+      <input matInput placeholder="Select Tracking Partner" aria-label="Tracking Partner" [matAutocomplete]="auto" [formControl]="partnerCtrl">
+      <mat-autocomplete #auto="matAutocomplete" [displayWith]="displaySelect">
+        <mat-option *ngFor="let partner of partners | async" [value]="partner">
+          <span>{{partner.name}}</span>
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+    <span *ngIf="!partnerCtrl.value">OR</span>
+    <button mat-button type="button" color="primary" (click)="create()" *ngIf="!partnerCtrl.value || filtered && filtered.length == 0">Create Partner</button>
+    <button mat-button type="button" color="primary" (click)="edit()" *ngIf="partnerCtrl.value && filtered && filtered.length > 0">Edit Partner name</button>
+    <mat-error *ngIf="error">Please select an existing partner or Create a new one</mat-error>
+    <div mat-dialog-actions>
+      <button mat-button type="button" [mat-dialog-close]>Cancel</button>
+      <button mat-button type="submit" color="primary" (click)="confirm()">Confirm</button>
+    </div>
+  </form>
+   <form [formGroup]="formGroup" novalidate autocomplete="off" *ngIf="showForm">
+    <mat-form-field class="full-width">
+      <input type="text" required matInput placeholder="Name" formControlName="name">
+    </mat-form-field>
+    <button mat-button type="button" [disabled]="loading" (click)="showForm = false">Cancel</button>
+    <button mat-flat-button type="button" color="primary" (click)="save()" [disabled]="formGroup.invalid || loading">Save</button>
+  </form>
+</div>

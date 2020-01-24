@@ -1,0 +1,23 @@
+<h1 mat-dialog-title>{{data.public_identifier? 'Edit' : 'Create'}} Advertiser</h1>
+<div class="dialog-container">
+<form [formGroup]="formGroup" novalidate autocomplete="off">
+  <mat-form-field class="full-width">
+    <input type="text" matInput placeholder="Advertiser Name" required formControlName="name" [errorStateMatcher]="matcher">
+    <mat-error *ngIf="name.hasError('required')">This field is required</mat-error>
+  </mat-form-field>
+  <mat-form-field class="full-width">
+    <input type="text" matInput placeholder="Product Domain" formControlName="adomain" required [errorStateMatcher]="matcher">
+    <mat-error *ngIf="name.hasError('required')">This field is required</mat-error>
+  </mat-form-field>
+  <mat-form-field class="full-width">
+    <input type="text" matInput placeholder="Advertiser URL" formControlName="advdomain" [errorStateMatcher]="matcher">
+    <mat-error *ngIf="advdomain.hasError('required')">This field is required</mat-error>
+    <mat-error *ngIf="advdomain.hasError('pattern')">This field must be an URL</mat-error>
+  </mat-form-field>
+  <div mat-dialog-actions>
+    <button mat-button type="button" [mat-dialog-close]>Cancel</button>
+    <button mat-button type="submit" *ngIf="!loading" color="primary" [disabled]="formGroup.invalid" (click)="save()">{{data.public_identifier? 'Update' : 'Create'}}</button>
+    <button mat-button type="buttom" *ngIf="loading" color="primary" [disabled]=true>...</button>
+  </div>
+</form>
+</div>

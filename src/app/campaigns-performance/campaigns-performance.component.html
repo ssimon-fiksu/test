@@ -1,0 +1,358 @@
+<div class="product-selector-header">
+  <mat-toolbar color="primary">
+    <mat-toolbar-row>
+      <span>Campaign Performance</span>
+    </mat-toolbar-row>
+  </mat-toolbar>
+</div>
+<div style="padding-left: 10px;">
+  <mat-expansion-panel class="acc-info" #panel *ngxPermissionsOnly="['account viewer']">
+    <mat-expansion-panel-header><mat-panel-title>Account Info</mat-panel-title></mat-expansion-panel-header>
+    <!-- Acc Name -->
+    <mat-form-field class="full-width">
+      <div class="input-wrap" id="acc-name">
+        <textarea matInput readonly [value]="accInfo.account_name" cdkTextareaAutosize></textarea>
+      </div>
+    </mat-form-field>
+    <!-- Funds Remaining -->
+    <mat-form-field *ngxPermissionsOnly="['account editor']" class="full-width" (appBlur)="fundsFormControl.setValue(accInfo.dollars_remaining); fundsFormControl.markAsPristine()">
+      <label>Funds Remaining:</label>
+      <div class="input-wrap editable" [ngClass]="{'red': fundsFormControl.invalid, 'dirty': fundsFormControl.dirty}" matTooltip="Value must be greater than 0" [matTooltipDisabled]="fundsFormControl.valid">
+        <span>$&nbsp;</span><input #editableInput [formControl]="fundsFormControl" type="number" matInput [value]="accInfo.dollars_remaining" />
+        <button *ngIf="fundsFormControl.dirty" mat-icon-button [disabled]="updateNumbers || fundsFormControl.invalid" aria-label="Save changes" (click)="updateFunds()"><mat-icon>done</mat-icon></button>
+      </div>
+    </mat-form-field>
+    <mat-form-field class="full-width" *ngxPermissionsExcept="['account editor']">
+      <label>Funds Remaining:</label>
+      <div class="input-wrap">
+        <span>$&nbsp;</span><input matInput [formControl]="fundsFormControl" readonly [value]="accInfo.dollars_remaining" />
+      </div>
+    </mat-form-field>
+    
+    <!-- Daily Client Budget -->
+    <mat-form-field *ngxPermissionsOnly="['account editor']" class="full-width" (appBlur)="clientBFormControl.setValue(accInfo.daily_client_budget_dollars); clientBFormControl.markAsPristine()">
+      <label>Daily Client Budget:</label>
+      <div class="input-wrap editable"  [ngClass]="{'red': clientBFormControl.invalid, 'dirty': clientBFormControl.dirty}" matTooltip="Value must be greater than 0"
+          [matTooltipDisabled]="clientBFormControl.valid">
+        <span>$&nbsp;</span><input #editableInput type="number" matInput [formControl]="clientBFormControl" [value]="accInfo.daily_client_budget_dollars" />
+        <button *ngIf="clientBFormControl.dirty" mat-icon-button [disabled]="updateNumbers  || clientBFormControl.invalid" aria-label="Save changes" (click)="updateClientBudget()"><mat-icon>done</mat-icon></button>
+      </div>
+    </mat-form-field>
+    <mat-form-field class="full-width" *ngxPermissionsExcept="['account editor']">
+      <label>Daily Client Budget:</label>
+      <div class="input-wrap">
+        <span>$&nbsp;</span><input matInput [formControl]="clientBFormControl" readonly [value]="accInfo.daily_client_budget_dollars" />
+      </div>
+    </mat-form-field>
+
+    <!-- Daily Budget Optimization -->
+    <mat-form-field *ngxPermissionsOnly="['account editor']" class="full-width" (appBlur)="optBFormControl.setValue(accInfo.daily_budget_dollars); optBFormControl.markAsPristine()">
+      <label>Daily Budget Optimization:</label>
+      <div class="input-wrap editable"  [ngClass]="{'red': optBFormControl.invalid, 'dirty': optBFormControl.dirty}" matTooltip="Value must be greater than 0"
+          [matTooltipDisabled]="optBFormControl.valid">
+        <span>$&nbsp;</span><input #editableInput type="number" matInput [formControl]="optBFormControl" [value]="accInfo.daily_budget_dollars" />
+        <button *ngIf="optBFormControl.dirty" mat-icon-button [disabled]="updateNumbers  || optBFormControl.invalid" aria-label="Save changes" (click)="updateOptBudget()"><mat-icon>done</mat-icon></button>
+      </div>
+    </mat-form-field>
+    <mat-form-field class="full-width" *ngxPermissionsExcept="['account editor']">
+      <label>Daily Budget Optimization:</label>
+      <div class="input-wrap">
+        <span>$&nbsp;</span><input matInput [formControl]="optBFormControl" readonly [value]="accInfo.daily_budget_dollars" />
+      </div>
+    </mat-form-field>
+
+    <!-- Daily Budget Exploration -->
+    <mat-form-field *ngxPermissionsOnly="['account editor']" class="full-width" (appBlur)="expBFormControl.setValue(accInfo.daily_budget_exploration_dollars); expBFormControl.markAsPristine()">
+      <label>Daily Budget Exploration:</label>
+      <div class="input-wrap editable"  [ngClass]="{'red': expBFormControl.invalid, 'dirty': expBFormControl.dirty}" matTooltip="Value must be greater than 0"
+          [matTooltipDisabled]="expBFormControl.valid">
+        <span>$&nbsp;</span><input #editableInput type="number" matInput [formControl]="expBFormControl" [value]="accInfo.daily_budget_exploration_dollars" />
+        <button *ngIf="expBFormControl.dirty" mat-icon-button [disabled]="updateNumbers  || expBFormControl.invalid" aria-label="Save changes" (click)="updateExpBudget()"><mat-icon>done</mat-icon></button>
+      </div>
+    </mat-form-field>
+    <mat-form-field class="full-width" *ngxPermissionsExcept="['account editor']">
+      <label>Daily Budget Exploration:</label>
+      <div class="input-wrap">
+        <span>$&nbsp;</span><input matInput [formControl]="expBFormControl" readonly [value]="accInfo.daily_budget_exploration_dollars" />
+      </div>
+    </mat-form-field>
+
+    <!-- Min Allowed Age -->
+    <mat-form-field *ngxPermissionsOnly="['account editor']" class="full-width" (appBlur)="ageFormControl.setValue(accInfo.min_allowed_age); ageFormControl.markAsPristine()">
+      <label>Min Allowed Age:</label>
+      <div class="input-wrap editable"  [ngClass]="{'red': ageFormControl.invalid, 'dirty': ageFormControl.dirty}" matTooltip="Value must be greater than 0 and less than 127"
+          [matTooltipDisabled]="ageFormControl.valid">
+        <input #editableInput type="number" matInput [formControl]="ageFormControl" [value]="accInfo.min_allowed_age" />
+        <button *ngIf="ageFormControl.dirty" mat-icon-button [disabled]="updateNumbers  || ageFormControl.invalid" aria-label="Save changes" (click)="updateMinAllowAge()"><mat-icon>done</mat-icon></button>
+      </div>
+    </mat-form-field>
+    <mat-form-field *ngxPermissionsExcept="['account editor']" class="full-width" (appBlur)="ageFormControl.setValue(accInfo.min_allowed_age); ageFormControl.markAsPristine()">
+      <label>Min Allowed Age:</label>
+      <div class="input-wrap">
+        <span>$&nbsp;</span><input matInput [formControl]="ageFormControl" readonly [value]="accInfo.min_allowed_age" />
+      </div>
+    </mat-form-field>
+
+    <mat-form-field class="full-width">
+      <label>Daily Spend (Client):</label>
+      <div class="input-wrap">
+        <span>$&nbsp;</span><input matInput readonly [value]="accInfo.client_spend_today" />
+      </div>
+    </mat-form-field>
+    <mat-form-field class="full-width">
+      <label>Daily Spend (Media):</label>
+      <div class="input-wrap">
+        <span>$&nbsp;</span><input matInput readonly [value]="accInfo.media_spend_today" />
+      </div>
+    </mat-form-field>
+    <mat-form-field class="full-width">
+      <label>Optimization Spend Today:</label>
+      <div class="input-wrap">
+        <span>$&nbsp;</span><input matInput readonly [value]="accInfo.spend_today" />
+      </div>
+    </mat-form-field>
+    <mat-form-field class="full-width">
+      <label>Exploration Spend Today:</label>
+      <div class="input-wrap">
+        <span>$&nbsp;</span><input matInput readonly [value]="accInfo.exploration_spend_today" />
+      </div>
+    </mat-form-field>
+    <mat-form-field class="full-width" id="last-position">
+      <label>Product Domain:</label>
+      <div class="input-wrap">
+        <input matInput readonly [value]="accInfo.adomain" />
+      </div>
+    </mat-form-field>
+    <div class="link-label">
+      <label>Account Publisher Lists:</label>
+      <a mat-button *ngxPermissionsOnly="['account editor']" class="link" (click)="openPubTargeting()">{{pubTargetDisplay()}}</a>
+      <a mat-button *ngxPermissionsExcept="['account editor']" class="link disabled">{{pubTargetDisplay()}}</a>
+    </div>
+    <div class="link-label">
+      <label>Day&Time Target:</label>
+      <a mat-button *ngxPermissionsOnly="['account editor']" class="link" (click)="openDateTimeTargeting()">{{accInfo.account_day_hour_targets.length == 0 ? 'All Time' : 'Custom'}}</a>
+      <a mat-button *ngxPermissionsExcept="['account editor']" class="link disabled">{{accInfo.account_day_hour_targets.length == 0 ? 'All Time' : 'Custom'}}</a>
+    </div>
+    <div class="link-label" *ngxPermissionsOnly="['account viewer']">
+      <label>Audiences:</label>
+      <a mat-button *ngxPermissionsOnly="['account editor']" class="link" (click)="openAudienceTargeting()">{{audienceTargetDisplay()}}</a>
+      <a mat-button *ngxPermissionsExcept="['account editor']" class="link disabled">{{audienceTargetDisplay()}}</a>
+    </div>
+    <mat-form-field class="full-width" *ngxPermissionsExcept="['account editor']">
+      <label>Pacing:</label>
+      <div class="input-wrap">
+        <input matInput readonly [value]="accInfo.is_pacing_enable ? 'Enabled' : 'Disabled'" />
+      </div>
+    </mat-form-field>
+    <div class="full-width checkbox" *ngxPermissionsOnly="['account editor']">
+      <div class="input-wrap" id="pacing-check">
+        <mat-checkbox [disabled]="updatePacingStatus" color="primary" labelPosition="before" (change)="updatePacing()" [(ngModel)]="accInfo.is_pacing_enabled">Pacing Enabled</mat-checkbox>
+        <span *ngIf="updatePacingStatus" class="red" style="margin-left: 10px;">Updating...</span>
+      </div>
+    </div>
+    <mat-form-field class="full-width">
+      <label>Advertiser:</label>
+      <div class="input-wrap">
+        <input matInput readonly [value]="accInfo.advertiser" />
+      </div>
+    </mat-form-field>
+  </mat-expansion-panel>
+</div>
+<br>
+<div style="padding-left: 10px;">
+  <mat-expansion-panel class="color-legend">
+    <mat-expansion-panel-header><mat-panel-title>Show color legend</mat-panel-title></mat-expansion-panel-header>
+    <div class="notes">Notes about color scheme of exploration and optimization spends:</div>
+    <div><span class="red">RED</span> --> (Opt/Exp/Client) Spend Today > (Opt/Exp/Client) Daily Budget AND (Opt/Exp/Client) Daily Budget > 0</div>
+    <div><span class="orange">ORANGE</span> --> (Opt/Exp/Client/Client) Spend Today = 0 AND campaign IS ACTIVE</div>
+    <span class="green">GREEN</span> --> (Opt/Exp/Client) Spend Today = (Opt/Exp/Client) Daily Budget AND campaign IS ACTIVE
+    <br>
+    <mat-divider></mat-divider>
+    <br>
+    <div class="notes">Notes about color scheme of Profit/Margin:</div>
+    <span class="red">RED</span> --> Profit/Margin < 0
+    <br>
+    <mat-divider></mat-divider>
+    <br>
+    <div class="notes">Notes about color scheme of creative counts:</div>
+    <div id="creative-chips-legend">
+      <mat-chip-list class="mat-chip-list-stacked" aria-label="Legend">
+        <mat-chip class="creative-chip green"  selected><div>Standard creatives</div></mat-chip>
+        <mat-chip class="creative-chip yellow"  selected><div>Native creatives</div></mat-chip>
+        <mat-chip class="creative-chip blue"  selected><div>Video creatives</div></mat-chip>
+        <mat-chip class="creative-chip pink"  selected><div>JS creatives</div></mat-chip>
+        <mat-chip class="creative-chip purple"  selected><div>Playable creatives"</div></mat-chip>
+      </mat-chip-list>
+    </div>
+  </mat-expansion-panel>
+</div>
+<div class="section main-container"> 
+  <mat-form-field>
+    <mat-label>Status</mat-label>
+      <mat-select [(value)]="active" (selectionChange)="searchName.value = ''; getCampaignPerformances()" [disabled]="loading">
+        <mat-option value="">All</mat-option>
+        <mat-option value="true">Active</mat-option>
+        <mat-option value="false">Inactive</mat-option>
+      </mat-select>
+  </mat-form-field> 
+  <mat-form-field id="wide-input">
+    <input matInput #searchName (keyup)="applyFilter($event.target.value)" placeholder="Filter campaigns by name" [disabled]="loading">
+  </mat-form-field>
+  <mat-toolbar id="small-toolbar">
+    <mat-toolbar-row>
+      <mat-icon matTooltip="To use the filter by date, you need to turn on the button next to the label. (If the filter is enabled, campaigns with no start date will not be displayed)">help</mat-icon><mat-slide-toggle color="primary" [disabled]="loading" [checked]="dateFilterChecked" (change)="dateFilterChecked = $event.checked; updateRange(null)" disableDragValue="true" labelPosition="before">Campaigns Start Date Filter</mat-slide-toggle>
+      <div [ngClass]="{'disabled-overlay': !dateFilterChecked}"></div>
+      <ngx-mat-drp id="daterange" (selectedDateRangeChanged)="updateRange($event)" [options]="options" #dateRangePicker></ngx-mat-drp>
+    </mat-toolbar-row>
+  </mat-toolbar>
+</div>
+<app-spinner *ngIf="loading"></app-spinner>
+<div class="table-container">
+  <table *ngIf="!loading" mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8 main-table" matSortActive="impressions_today" matSortDirection="desc" id="camp-perf-table" matSortDisableClear="true">
+
+  <ng-container matColumnDef="external_id">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>External ID</th>
+    <td mat-cell class="small-cell" *matCellDef="let camp"> {{camp.external_id}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="campaign_name">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
+    <td mat-cell class="align-left" *matCellDef="let camp">{{camp.campaign_name}}<mat-icon matTooltip="Campaign Info" (click)="openCampInfo(camp.external_id)">help</mat-icon></td>
+  </ng-container>
+
+  <ng-container matColumnDef="is_active">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>
+    <td mat-cell class="small-cell" *matCellDef="let camp"> 
+      {{camp.is_active ? 'Enabled': 'Disabled'}}
+      <button *ngxPermissionsOnly="['campaign editor']" mat-stroked-button (click)="updateStatus(camp)" [disabled]="updateStatusLoading">{{camp.is_active ? 'Disable': 'Enable'}}</button>
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="adx_creatives">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> Adx Creatives</th>
+    <td mat-cell *matCellDef="let camp"> {{camp.adx_creatives.total || camp.adx_creatives}}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="creative">
+    <th mat-header-cell *matHeaderCellDef> Creatives</th>
+    <td mat-cell *matCellDef="let camp" id="creative-chips">
+      <mat-chip-list class="mat-chip-list-stacked" aria-label="Creatives">
+        <mat-chip class="creative-chip green"  selected matTooltip="Standart creatives (total/assigned)"><div>{{camp.creative.totals.standard}}/{{camp.creative.counters ? camp.creative.counters.standard : 0}}</div></mat-chip>
+        <mat-chip class="creative-chip yellow"  selected matTooltip="Native creatives (total/assigned)"><div>{{camp.creative.totals.native}}/{{camp.creative.counters ? camp.creative.counters.native : 0}}</div></mat-chip>
+        <mat-chip class="creative-chip blue"  selected matTooltip="Video creatives (total/assigned)"><div>{{camp.creative.totals.video}}/{{camp.creative.counter ? camp.creative.counters.video : 0}}</div></mat-chip>
+        <mat-chip class="creative-chip pink"  selected matTooltip="JS creatives (total/assigned)"><div>{{camp.creative.totals.js}}/{{camp.creative.counters ? camp.creative.counters.js : 0}}</div></mat-chip>
+        <mat-chip class="creative-chip purple"  selected matTooltip="Playable creatives (total/assigned)"><div>{{camp.creative.totals.playable}}/{{camp.creative.counters ? camp.creative.counters.playable : 0}}</div></mat-chip>
+      </mat-chip-list>
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="client_budget">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> Client Budget </th>
+    <td mat-cell *matCellDef="let camp"> $<span class="editable">{{camp.client_budget | number}}</span></td>
+  </ng-container>
+
+  <ng-container matColumnDef="is_pacing_enabled">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> Pacing Status </th>
+    <td mat-cell *matCellDef="let camp"> {{camp.is_pacing_enabled ? 'Enabled': 'Disabled'}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="reward_target">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> Reward Targeting </th>
+    <td mat-cell *matCellDef="let camp"> {{camp.reward_target}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="target">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> Target </th>
+    <td mat-cell *matCellDef="let camp" class="nowrap">
+      <div *ngIf="camp.target.client_bid">$<span class="editable">{{camp.target.client_bid.value}}</span> {{camp.target.client_bid.pricing_model}}</div> 
+      <div>$<span class="editable">{{camp.target.bid_strategy.value}}</span> {{camp.target.bid_strategy.pricing_model}}</div> 
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="ads_auction_metrics">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> Auctions/Bids/Bid Floor Drops </th>
+    <td mat-cell *matCellDef="let camp"> 
+      {{camp.ads_auction_metrics.auctions}}/{{camp.ads_auction_metrics.bids}}/{{camp.ads_auction_metrics.bid_floor_drops}}
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="first_impression_at">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header class="nowrap"> Started date </th>
+    <td mat-cell *matCellDef="let camp"> {{camp.first_impression_at}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="impressions">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> Imprs today</th>
+    <td mat-cell *matCellDef="let camp"> {{camp.impressions}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="clicks">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> Clicks today</th>
+    <td mat-cell *matCellDef="let camp"> {{camp.clicks}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="conversions">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> Conv today</th>
+    <td mat-cell *matCellDef="let camp"> {{camp.conversions}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="cr">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> CR </th>
+    <td mat-cell *matCellDef="let camp"> {{camp.cr}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="ctr">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> CTR </th>
+    <td mat-cell *matCellDef="let camp"> {{camp.ctr}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="client_spend">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> Client Spend Today</th>
+    <td mat-cell *matCellDef="let camp" [ngClass]="{'orange': camp.is_active && camp.client_spend==0, 'red': camp.client_spend > camp.client_budget && camp.client_budget > 0, 'green': camp.client_spend == camp.client_budget && camp.is_active}"> ${{camp.client_spend}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="media_spend">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> Media Spend Today</th>
+    <td mat-cell *matCellDef="let camp"> ${{camp.media_spend}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="exp_spend">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> Exploration Spend Today</th>
+    <td mat-cell *matCellDef="let camp" [ngClass]="{'orange': camp.is_active && camp.exp_spend==0, 'red': camp.exp_spend > camp.daily_budget_exploration_dollars && camp.daily_budget_exploration_dollars > 0, 'green': camp.exp_spend == camp.daily_budget_exploration_dollars && camp.is_active}"> ${{camp.exp_spend}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="opt_spend">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> Optimization Spend Today</th>
+    <td mat-cell *matCellDef="let camp" [ngClass]="{'orange': camp.is_active && camp.opt_spend==0, 'red': camp.opt_spend > camp.daily_budget_dollars && camp.daily_budget_dollars > 0, 'green': camp.opt_spend == camp.daily_budget_dollars && camp.is_active}"> ${{camp.opt_spend}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="cpm">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> CPM </th>
+    <td mat-cell *matCellDef="let camp"> {{camp.cpm}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="cpc">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> CPC </th>
+    <td mat-cell *matCellDef="let camp"> {{camp.cpc}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="cpi">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> CPI </th>
+    <td mat-cell *matCellDef="let camp"> {{camp.cpi}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="profit">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> Profit </th>
+    <td mat-cell *matCellDef="let camp" [ngClass]="{'red': camp.profit < 0}"> ${{camp.profit}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="margin">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> Margin </th>
+    <td mat-cell *matCellDef="let camp" [ngClass]="{'red': camp.profit < 0}"> {{camp.margin}} </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+  <div *ngIf="!loading && dataSource.data.length === 0" id="no-records">No records found</div>
+</div>

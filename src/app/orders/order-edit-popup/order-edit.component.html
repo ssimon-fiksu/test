@@ -1,0 +1,32 @@
+<h1 mat-dialog-title>{{data.public_identifier? 'Edit' : 'Create'}} IO</h1>
+<div class="dialog-container">
+<form [formGroup]="formGroup" novalidate>
+  <mat-form-field class="full-width">
+    <input type="text" matInput placeholder="Name" required formControlName="name" [errorStateMatcher]="matcher">
+    <mat-error *ngIf="name.hasError('required')">This field is required</mat-error>
+  </mat-form-field>
+  <mat-form-field class="full-width" *ngIf="data.public_identifier">
+    <input type="text" formControlName="adv" matInput placeholder="Advertiser" readonly="readonly">
+  </mat-form-field>
+  <mat-form-field  class="full-width" *ngIf="!data.public_identifier">
+    <mat-label>Advertiser</mat-label>
+    <mat-select formControlName="adv" #advSelect required>
+      <mat-option *ngFor="let adv of advertisers" [value]="adv.public_identifier">{{adv.name}}</mat-option>
+    </mat-select>
+     <mat-error *ngIf="adv.hasError('required')">This field is required</mat-error>
+  </mat-form-field>
+  <div *ngIf="!data.public_identifier">
+    <mat-label class="file">Upload File</mat-label>
+    <button mat-stroked-button (click)="error = ''; fileInput.click()">Browse</button>
+    <input accept="product/pdf,product/msword,product/vnd.openxmlformats-officedocument.wordprocessingml.document" hidden multiple="false" type="file" #fileInput (change)="handleFileInput($event.target.files)">
+    <span *ngIf="file" class="file-name"><div>{{file.name}}</div></span>
+    <span *ngIf="!file" class="file-name"><div>*doc,docx,pdf</div></span>
+  </div>
+  <div mat-dialog-actions>
+    <button mat-button type="button" [mat-dialog-close]>Cancel</button>
+    <button mat-button type="submit" *ngIf="!loading && data.public_identifier" color="primary" [disabled]="formGroup.invalid" (click)="update()">Update</button>
+    <button mat-button type="submit" *ngIf="!loading && !data.public_identifier" color="primary" [disabled]="formGroup.invalid || !file" (click)="create()">Create</button>
+    <button mat-button type="buttom" *ngIf="loading" color="primary" [disabled]=true>Saving...</button>
+  </div>
+</form>
+</div>

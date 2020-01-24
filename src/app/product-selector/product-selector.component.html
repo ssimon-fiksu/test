@@ -1,0 +1,11 @@
+<!-- Product -->
+  <mat-form-field>
+    <mat-label *ngIf="selectedAdv">{{loading ? 'Loading...' : 'Select Product'}}</mat-label>
+    <mat-label *ngIf="!selectedAdv">Select Advertiser first</mat-label>
+    <mat-select [(ngModel)]="selectedProduct" (ngModelChange)="productChanged()" [disabled]="loading">
+      <mat-option *ngIf="productsData.length == 0">No Products</mat-option>
+      <mat-option *ngFor="let product of productsData" [value]="product">
+        {{product.application_name}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>

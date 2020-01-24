@@ -1,0 +1,44 @@
+<h1 mat-dialog-title>Events Configuration</h1>
+<div class="dialog-container">
+  <app-spinner *ngIf="loading"></app-spinner>
+  <table *ngIf="!loading" mat-table [dataSource]="dataSource" matSort class="main-table" matSortActive="name" matSortDirection="asc" matSortDisableClear="true" id="event-table">
+
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Event </th>
+      <td mat-cell class="align-left" *matCellDef="let event">{{event.name}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="is_receiving">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Receiving </th>
+      <td mat-cell class="small-cell" *matCellDef="let event" class="nowrap">
+        <mat-checkbox [(ngModel)]="event.is_receiving" [disabled]="saving || view"></mat-checkbox>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="event_purpose">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Event Purpose </th>
+      <td mat-cell class="small-cell" *matCellDef="let event" class="nowrap" [ngClass]="{'view': purposeView}">
+        <mat-select [(value)]="event.event_purpose" [disabled]="saving || purposeView">
+          <mat-option value="purchase">purchase</mat-option>
+          <mat-option value="other">other</mat-option>
+       </mat-select>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef>Action</th>
+      <td mat-cell class="small-cell" *matCellDef="let event; let i = index" class="nowrap">
+        <button mat-button color="primary" (click)="getPostBack(event)" [disabled]="saving">Get PostBack</button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+  <div mat-dialog-actions *ngIf="!loading">
+    <button mat-button type="button" *ngIf="!view" [mat-dialog-close] [disabled]="saving">Cancel</button>
+    <button mat-button type="button" *ngIf="!saving && !view" color="primary" (click)="confirm()">Confirm</button>
+    <button mat-button type="button" *ngIf="saving && !view" color="primary" disabled="">Saving...</button>
+    <button mat-flat-button color="primary" type="button" *ngIf="view" [mat-dialog-close]>OK</button>
+  </div>
+</div>

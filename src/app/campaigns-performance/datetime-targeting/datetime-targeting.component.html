@@ -1,0 +1,48 @@
+<h1 mat-dialog-title>Date&Time Target</h1>
+<div class="dialog-container" id="day-time-modal-body">
+  <mat-form-field>
+    <mat-label>TimeZone UTC Offset</mat-label>
+    <mat-select [(ngModel)]="data.timezone">
+      <mat-option *ngFor="let tz of timeZones" [value]="tz">
+        {{tz}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <table>
+    <thead>
+      <tr>
+        <th class="head-day">Day</th>
+        <th class="head-blank"></th>
+        <td class="head" *ngFor='let hour of hours'>{{hour}}</td>
+        <th class="head-describe"></th>
+      </tr>
+    </thead>
+    <tbody id="time-sheet">
+      <tr class="row-day-time">
+        <td class="row-title"></td>
+        <td class="row-action"></td>
+        <td class="row-value" (click)="markHours(hour)" *ngFor='let hour of hours'><div class="dot" [ngClass]="{'dot-selected':isHourOnObj[hour]}"></div></td>
+        <td class="row-describe"></td>
+      </tr>
+      <tr class="row-day-time" *ngFor="let day of days">
+      <ng-container
+           [ngTemplateOutlet]="dayLink" 
+           [ngTemplateOutletContext]="{link:day}">
+      </ng-container>
+      </tr>
+    </tbody>
+  </table>
+  <div mat-dialog-actions>
+    <button mat-button type="button" [mat-dialog-close]>Cancel</button>
+    <button mat-button type="button" *ngIf="!loading" color="primary" (click)="save()">Done</button>
+    <button mat-button type="buttom" *ngIf="loading" color="primary" [disabled]=true>Loading...</button>
+  </div>
+</div>
+<ng-template #dayLink let-link='link'>
+    <td class="row-title">{{link}}</td>
+    <td class="row-action" (click)="markDays(link, daytimeTarget[daysNum[link]] && daytimeTarget[daysNum[link]].length == hours.length)"><div class="dot" [ngClass]="{'dot-selected':daytimeTarget[daysNum[link]] && daytimeTarget[daysNum[link]].length == hours.length}"></div></td>
+    <td class="row-value" (click)="markHour(link, hour)" *ngFor='let hour of hours'><div class="dot" [ngClass]="{'dot-selected':daytimeTarget[daysNum[link]] && daytimeTarget[daysNum[link]].indexOf(hour) > -1}"></div></td>
+    <td class="row-describe">
+      <span class="describe-text" matTooltip="{{filterRows(link)}}">{{filterRows(link)}}</span>
+    </td>
+</ng-template>

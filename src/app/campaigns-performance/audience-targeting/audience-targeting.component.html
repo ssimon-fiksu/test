@@ -1,0 +1,50 @@
+<h1 mat-dialog-title>Target Audiences</h1>
+<div class="dialog-container" id="audience-target">
+  <mat-radio-group
+    aria-labelledby="radio-group-label"
+    class="radio-group"
+    [(ngModel)]="audienceType">
+    <mat-radio-button (change)="filteredAudList = filter($event.value)" class="radio-button" *ngFor="let at of audienceTypes" [value]="at.value" [disabled]="filter(at.value).length == 0">
+      {{at.name}}
+    </mat-radio-button>
+  </mat-radio-group>
+  <ng-select
+    class="custom"
+    [items]="filteredAudList"
+    [loading]="loading"
+    [markFirst]="false"
+    [hideSelected]="false"
+     bindLabel="audience_name"
+     bindValue="short_name"
+     [multiple]="true"
+     [closeOnSelect]="false"
+     placeholder="Include"
+     [virtualScroll]="true"
+     [(ngModel)]="selected.include">
+      <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+          <input [disabled]="item$.disabled" [ngClass]="{'': disableItems(item$, item, 'exclude')}" id="item-{{index}}" type="checkbox" [ngModel]="item$.selected"/> {{item.audience_name}}
+      </ng-template>
+  </ng-select>
+  <ng-select
+    class="custom"
+    [items]="filteredAudList"
+    [loading]="loading"
+    [markFirst]="false"
+    [hideSelected]="false"
+     bindLabel="audience_name"
+     bindValue="short_name"
+     [multiple]="true"
+     [closeOnSelect]="false"
+     placeholder="Exclude"
+     [virtualScroll]="true"
+     [(ngModel)]="selected.exclude">
+      <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+          <input [disabled]="item$.disabled" [ngClass]="{'': disableItems(item$, item, 'include')}" id="item-{{index}}" type="checkbox" [ngModel]="item$.selected"/> {{item.audience_name}}
+      </ng-template>
+  </ng-select>
+  <div mat-dialog-actions>
+    <button mat-button type="button" [mat-dialog-close]>Cancel</button>
+    <button mat-button type="button" *ngIf="!loading" color="primary" (click)="save()">Done</button>
+    <button mat-button type="buttom" *ngIf="loading" color="primary" [disabled]=true>Loading...</button>
+  </div>
+</div>

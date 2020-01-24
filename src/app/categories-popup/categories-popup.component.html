@@ -1,0 +1,18 @@
+<mat-toolbar>
+  <h1 mat-dialog-title>{{data.name}}</h1>
+</mat-toolbar>
+<div class="dialog-container">
+  <mat-selection-list dense #categories [(ngModel)]="catSelected" color="primary">
+    <mat-list-option  (click)="checkUncheckParent(cat, option.selected)" [ngClass]="{'opened': option.selected}" checkboxPosition="before" #option disableRipple=true *ngFor="let cat of data.cats"  [value]="cat.public_identifier" id="{{cat.child_categories.length > 0}}">
+      <span matLine>{{cat.name}}</span>
+      <mat-list-option color="primary" dense [style.display]="option.selected ? 'block' : 'none'" checkboxPosition="before" matLine #optionSub *ngFor="let ccat of cat.child_categories" class="sub" (click)="stopBubble($event, ccat, optionSub.selected)" [value]="ccat.public_identifier">
+        {{ccat.name}}
+      </mat-list-option>
+    </mat-list-option>
+  </mat-selection-list>
+  <mat-divider></mat-divider>
+  <div mat-dialog-actions>
+    <button mat-button type="button" [mat-dialog-close]>Cancel</button>
+    <button mat-button type="submit" *ngIf="!loading" color="primary" [mat-dialog-close]="dataAllSelected">Ok</button>
+  </div>
+</div>

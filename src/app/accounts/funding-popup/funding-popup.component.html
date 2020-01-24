@@ -1,0 +1,23 @@
+<h1 mat-dialog-title>Account Funding</h1>
+<div class="dialog-container">
+<form class="example-form" (ngSubmit)="addFunds(fundsFormControl.value)">
+  <mat-form-field>
+    <input placeholder="Funds Remaining" matInput value={{data.funds_remaining}} [disabled]=true>
+    <span matPrefix>$&nbsp;</span>
+  </mat-form-field>
+  <mat-form-field class="example-full-width">
+    <input required type="number" matInput placeholder="Add/Subtract Funds" [formControl]="fundsFormControl"
+           [errorStateMatcher]="matcher">
+    <span matPrefix>$&nbsp;</span>
+    <mat-error *ngIf="fundsFormControl.hasError('required')">
+      This field is <strong>required</strong>
+    </mat-error>
+  </mat-form-field>
+  <mat-card>Note: Enter amounts in USD. Removing funds in RTB will require a full void and a new media commit on the Admin Dashboard.</mat-card>
+  <div mat-dialog-actions>
+    <button mat-button type="button" [mat-dialog-close]>Cancel</button>
+    <button mat-button type="submit" *ngIf="!loading" color="primary" [disabled]="fundsFormControl.invalid">Update</button>
+    <button mat-button type="buttom" *ngIf="loading" color="primary" [disabled]=true>Saving...</button>
+  </div>
+</form>
+</div>

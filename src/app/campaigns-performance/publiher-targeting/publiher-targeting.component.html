@@ -1,0 +1,43 @@
+<h1 mat-dialog-title>Target Publisher Lists</h1>
+<div class="dialog-container">
+  <ng-select
+    class="custom"
+    [items]="pubList"
+    [loading]="loading"
+    [markFirst]="false"
+    [hideSelected]="true"
+     bindLabel="name"
+     bindValue="external_id"
+     [multiple]="true"
+     [closeOnSelect]="true"
+     placeholder="Include"
+     [virtualScroll]="true"
+     [(ngModel)]="selected.include">
+      <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+          <span [ngClass]="{'': disableItems(item$, item, 'exclude')}"><mat-icon matTooltip="Global" *ngIf="item.is_global">language</mat-icon>{{item.name}}</span>
+      </ng-template>
+  </ng-select>
+  <ng-select
+    class="custom"
+    [items]="pubList"
+    [loading]="loading"
+    [markFirst]="false"
+    [hideSelected]="true"
+     bindLabel="name"
+     bindValue="external_id"
+     [multiple]="true"
+     [closeOnSelect]="true"
+     placeholder="Exclude"
+     [virtualScroll]="true"
+     [(ngModel)]="selected.exclude">
+      <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+          <span [ngClass]="{'': disableItems(item$, item, 'include')}"><mat-icon matTooltip="Global" *ngIf="item.is_global">language</mat-icon>{{item.name}}</span>
+      </ng-template>
+  </ng-select>
+  <div mat-dialog-actions>
+    <button mat-button type="button" [mat-dialog-close]>Cancel</button>
+    <button *ngxPermissionsOnly="['account viewer']" mat-button type="button" [disabled]="loading || (selected.include.length == 0 && selected.exclude == 0)" (click)="downloadListData()">Download Lists Data</button>
+    <button mat-button type="button" *ngIf="!loading" color="primary" (click)="save()">Done</button>
+    <button mat-button type="buttom" *ngIf="loading" color="primary" [disabled]=true>Loading...</button>
+  </div>
+</div>

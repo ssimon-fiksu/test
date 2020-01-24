@@ -1,0 +1,55 @@
+<div class="dialog-container" id="aud-info">
+  <div>
+    <p>Obtain links for upload and get file.
+      <b style="color: rgb(139, 0, 0);">IMPORTANT: For each upload must generate a new link!</b>
+    </p>
+    <mat-form-field class="full-width">
+      <textarea matInput rows="3" [value]="curlText"></textarea>
+    </mat-form-field>
+    <div class="text-center" #container>
+      <button mat-raised-button ngxClipboard [cbContent]="curlText" [container]="container">Copy to Clipboard</button>
+    </div>
+    <div>
+      <h4><b>SHORT API INSTRUCTION</b></h4>
+      <p>Please call this API as HTTP POST method with replacing of the following parameters:</p>
+      <ul>
+        <li><i>$AUTH_TOKEN</i> - your client token</li>
+        <li><i>$PASSWORD</i> - your password </li>
+        <li><i>$SYNC MODE</i> - following strings are allowed</li>
+        <ul>
+          <li><i>full</i> - to REPLACE audience ID's</li>
+          <li><i>iter-add</i> - to ADD new audience ID's</li>
+          <li><i>iter-delete </i>- to REMOVE unneeded audience ID's</li>
+        </ul>
+      </ul>
+      <p>Server will return JSON, that will contain a links for upload and get file:</p>
+      <p>Example:
+        <!-- <p style="padding: 10px; font-size: 95%;"> -->
+          <code style="padding: 10px; font-size: 95%;">
+            <br>&#123;
+              <br>"upload_location": "https://link.for.upload?some=params",
+              <br>"get_upload":"https://link.for.get?some=params",
+              <br>"expires":"XXXX-XX-XXT00:00:00"
+            <br>&#125;
+          </code>
+        <!-- </p> -->
+      </p>
+      <ul>
+        <li>Put URL(upload_location) - to upload/add/remove your ID's based on $SYNC MODE parameter value</li>
+        <li>Get URL(get_upload) - to upload currently available ID's loaded by you before</li>
+        <li>Exprires - expiration time, when Post and Get URL's will become invalid.</li>
+      </ul>
+      <p>Files can be loaded with CURL logic, sample:
+        <br>curl --upload-file '/file_path/file_name.csv.gz' upload_location
+      </p>
+      <p>Please Note:</p>
+      <ul>
+        <li>Allowed file formats - CSV/TXT, then need to compress to .gz</li>
+        <li>Just added Audience will start to work in 3 hours</li>
+      </ul>
+    </div>
+  </div>
+</div>
+<div mat-dialog-actions>
+  <button mat-raised-button type="button" [mat-dialog-close]>Close</button>
+</div>

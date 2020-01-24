@@ -1,0 +1,10 @@
+<h1 mat-dialog-title>Confirm action</h1>
+<div class="dialog-container">
+  <form (ngSubmit)="onSubmit()">
+    {{data}}
+    <div mat-dialog-actions>
+      <button mat-raised-button type="button" [mat-dialog-close]>Cancel</button>
+      <button mat-raised-button type="submit" color="warn">Confirm</button>
+    </div>
+  </form>
+</div>

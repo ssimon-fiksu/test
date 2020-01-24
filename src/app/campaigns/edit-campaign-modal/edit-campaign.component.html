@@ -1,0 +1,48 @@
+<h1 mat-dialog-title>{{data.camp ? 'Edit': 'New'}} Campaign</h1>
+<div class="dialog-container">
+<form [formGroup]="formGroup" novalidate autocomplete="off">
+  <mat-form-field class="full-width">
+    <input type="text" matInput placeholder="Campaign Name" required formControlName="name" [errorStateMatcher]="matcher">
+    <mat-error *ngIf="name.hasError('required')">This field is required</mat-error>
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput required [matDatepicker]="start" (click)="start.open()" placeholder="Start date" readonly formControlName="start_date" (dateChange)="dateChange()" />
+    <mat-datepicker-toggle matSuffix [for]="start"></mat-datepicker-toggle>
+    <mat-datepicker #start></mat-datepicker>
+  </mat-form-field>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  <mat-form-field>
+    <input matInput required [matDatepickerFilter]="endDatefilter" [matDatepicker]="end" (click)="end.open()" placeholder="End date" readonly formControlName="end_date" (dateChange)="dateChange()">
+    <mat-datepicker-toggle matSuffix [for]="end"></mat-datepicker-toggle>
+    <mat-datepicker #end></mat-datepicker>
+  </mat-form-field>
+  <mat-error *ngIf="end_date.hasError('invalid')">Start date must be less than end date and larger than today</mat-error>
+  <mat-form-field class="full-width">
+    <input type="number" matInput placeholder="Budget" required formControlName="budget" [errorStateMatcher]="matcher">
+    <mat-error *ngIf="budget.hasError('required')">This field is required</mat-error>
+    <mat-error *ngIf="budget.hasError('pattern')">Only integers allowed</mat-error>
+    <mat-error *ngIf="budget.hasError('min')">Budget can't be negative</mat-error>
+  </mat-form-field>
+  <div class="full-width link-field">
+    <mat-label>Impression Caps</mat-label>
+    &nbsp;
+    <button mat-flat-button type="button" (click)="impressionCapOpen()">
+      <span *ngIf="!loading">{{impCaps.impression_cap_hourly}} hourly, {{impCaps.impression_cap_daily}} daily,  {{impCaps.impression_cap_monthly}} monthly</span>
+      <span *ngIf="loading">Loading...</span>
+    </button>
+  </div>
+  <div class="full-width link-field">
+    <mat-label>Click Caps</mat-label>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <button mat-flat-button type="button" (click)="clickCapOpen()">
+      <span *ngIf="!loading">{{clickCaps.click_cap_daily}} daily, {{clickCaps.click_cap_monthly}} monthly</span>
+      <span *ngIf="loading">Loading...</span>
+    </button>
+  </div>
+  <div mat-dialog-actions>
+    <button mat-button type="button" [mat-dialog-close]>Cancel</button>
+    <button mat-button type="button" (click)="save()" *ngIf="!loading" color="primary">Save</button>
+    <button mat-button type="buttom" *ngIf="loading" color="primary" [disabled]=true>Updating...</button>
+  </div>
+</form>
+</div>

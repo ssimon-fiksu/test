@@ -1,0 +1,23 @@
+<h1 mat-dialog-title>Impression Caps</h1>
+<div class="dialog-container">
+<form [formGroup]="formGroup" novalidate autocomplete="off">
+  <mat-form-field class="full-width">
+    <input type="number" min="1" max="65535" required matInput placeholder="Daily" formControlName="day" [errorStateMatcher]="matcher">
+    <mat-error *ngIf="day.hasError('required')">This field is required</mat-error>
+    <mat-error *ngIf="day.hasError('pattern')">Value must be an integer</mat-error>
+    <mat-error *ngIf="day.hasError('min')">Value must be greater than 1</mat-error>
+    <mat-error *ngIf="day.hasError('max')">Value must be less than 65535</mat-error>
+  </mat-form-field>
+  <mat-form-field class="full-width">
+    <input type="number" min="1" max="" required matInput placeholder="Monthly" formControlName="month" [errorStateMatcher]="matcher">
+    <mat-error *ngIf="month.hasError('required')">This field is required</mat-error>
+    <mat-error *ngIf="month.hasError('pattern')">Value must be an integer</mat-error>
+    <mat-error *ngIf="month.hasError('min')">Value must be greater than 1</mat-error>
+    <mat-error *ngIf="month.hasError('max')">Value must be less than 65535</mat-error>
+  </mat-form-field>
+  <div mat-dialog-actions>
+    <button mat-button type="button" [mat-dialog-close]>Cancel</button>
+    <button mat-button type="submit" color="primary" [disabled]="formGroup.invalid" (click)="confirm()">Confirm</button>
+  </div>
+</form>
+</div>

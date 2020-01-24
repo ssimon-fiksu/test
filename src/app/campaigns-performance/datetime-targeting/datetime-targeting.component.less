@@ -1,0 +1,72 @@
+#day-time-modal-body {
+  .dot {
+    width: 10px;
+    height: 10px;
+    margin: auto;
+    border-radius: 5px;
+    background: rgb(226, 228, 230);
+  }
+  .describe-text {
+      overflow-x: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      display: block;
+      position: relative;
+      width: 160px;
+      max-width: 160px;
+  }
+  .dot-selected {
+    background: rgb(33, 121, 210);
+    cursor: pointer;
+  }
+  table {
+    margin: 15px auto;
+    font-size: 14px;
+    line-height: 1.42857;
+    background-color: rgba(0, 0, 0, 0);
+    border-collapse: collapse;
+    border-spacing: 0;
+    tr td:last-child {
+        border-right: 0;
+    }
+    tbody {
+      .row-action {
+        border-right: 2px solid rgb(128, 128, 128);
+        width: 16px;
+      }
+      tr:first-child td {
+        border-bottom: 2px solid rgb(128, 128, 128);
+      }
+      .row-value {     padding: 0; }
+      .row-value:hover, .row-action:hover {
+        background-color: rgba(0,131,193,0.1);
+      }
+    }
+    tr td:first-child {
+       border-left: 0;
+    }
+    tr:last-child td {
+      border-bottom: 0;
+    }
+    tr:first-child td {
+      border-top: 0;
+      height: 16px;
+    }
+    td {
+      cursor: pointer;
+      border: 1px solid rgb(230, 229, 229);
+    }
+    thead {
+      border-bottom: 2px solid rgb(230, 229, 229);
+      background-color: rgb(240, 242, 247);
+      .head-day {
+        width: 90px;
+        text-align: center;
+      }
+      td.head {
+        width: 20px;
+        text-align: center;
+      }
+    }
+  }
+}

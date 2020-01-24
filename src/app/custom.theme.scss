@@ -1,0 +1,42 @@
+@import '~@angular/material/theming';
+@include mat-core();
+
+$mat-fiksu: (
+    50 : #b5c5d5,
+    100 : #859eb9,
+    200 : #445e7a,
+    300 : #455e79,
+    400 : #3a4f65,
+    500 : #2f4052,
+    600 : #24313f,
+    700 : #19222b,
+    800 : #0e1218,
+    900 : #020304,
+    A100 : #9cbfe4,
+    A200 : #4c8bce,
+    A400 : #345980,
+    A700 : #344d66,
+    contrast: (
+        50 : #000000,
+        100 : #000000,
+        200 : #ffffff,
+        300 : #ffffff,
+        400 : #ffffff,
+        500 : #ffffff,
+        600 : #ffffff,
+        700 : #ffffff,
+        800 : #ffffff,
+        900 : #ffffff,
+        A100 : #000000,
+        A200 : #ffffff,
+        A400 : #ffffff,
+        A700 : #ffffff,
+    )
+);
+
+$primary: mat-palette($mat-fiksu,200);
+$accent: mat-palette($mat-orange,200);
+
+$theme: mat-light-theme($primary, $accent);
+
+@include angular-material-theme($theme);

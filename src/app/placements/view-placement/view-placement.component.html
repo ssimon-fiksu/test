@@ -1,0 +1,343 @@
+<mat-toolbar color="primary">
+  <mat-toolbar-row>
+    <span>View Placement</span>
+  </mat-toolbar-row>
+</mat-toolbar>
+<app-spinner *ngIf="loading"></app-spinner>
+<div class="main-container"> 
+  <form [formGroup]="formGroup" novalidate class="placement-form" [ngClass]="{'disabled': loading}">
+    <mat-form-field class="full-width">
+      <input type="text" matInput placeholder="Placement Name" readonly aria-label="Placement Name" formControlName="name">
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput placeholder="Start date" readonly formControlName="start_date" />
+    </mat-form-field>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <mat-form-field>
+      <input matInput placeholder="End date" readonly formControlName="end_date">
+    </mat-form-field>
+    <mat-form-field class="full-width view">
+      <mat-label>Status</mat-label>
+        <mat-select formControlName="status">
+          <mat-option value="active">Active</mat-option>
+          <mat-option value="inactive">Inactive</mat-option>
+        </mat-select>
+    </mat-form-field>
+    <h3>Pricing</h3>
+    <mat-form-field  class="view">
+      <mat-label>Bid Type</mat-label>
+      <mat-select formControlName="bid_type_id">
+        <mat-option *ngFor="let bt of bidTypesData | async" [value]="bt.id">{{bt.description}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    &nbsp;&nbsp;
+    <mat-form-field *ngIf="bidTypeValue && bidTypeValue.name != 'media'">
+      <span matPrefix>$ &nbsp;</span>
+      <input type="number" matInput placeholder="Bid" readonly formControlName="bid">
+    </mat-form-field>
+    <mat-form-field  *ngIf="bidTypeValue && bidTypeValue.name == 'media'">
+      <span matPrefix>% &nbsp;</span>
+      <input type="number" matInput placeholder="Media Fee" readonly formControlName="media_fee_percent">
+    </mat-form-field>
+    <mat-form-field class="full-width">
+      <span matPrefix>$ &nbsp;</span>
+      <input type="number" matInput placeholder="Budget" readonly formControlName="client_budget">
+    </mat-form-field>
+    <mat-form-field class="view">
+      <mat-label>Optimization Goal</mat-label>
+      <mat-select formControlName="placement_optimization_goal_id">
+        <mat-option *ngFor="let goal of goalsData | async" [value]="goal.id">{{goal.name}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    &nbsp;&nbsp;
+    <mat-form-field>
+      <span matPrefix>$ &nbsp;</span>
+      <input type="number" matInput readonly formControlName="placement_optimization_goal_value">
+    </mat-form-field>
+     <mat-form-field class="full-width">
+      <span matPrefix>$ &nbsp;</span>
+      <input type="number" readonly matInput placeholder="Max Bid Amount" formControlName="max_bid_amount">
+    </mat-form-field>
+    <div class="full-width view">
+      <mat-checkbox color="primary" formControlName="is_pacing_enabled">Pacing Enabled</mat-checkbox>
+    </div>
+
+    <!-- <h3>Audience</h3> -->
+    <h3>Audience</h3>
+    <div class="full-width link-field">
+      <mat-label>Impression Caps</mat-label>
+      &nbsp;
+      <button mat-flat-button type="button">
+        <span *ngIf="!loading"><input class="small" matInput readonly formControlName="impression_cap_hourly">hourly, <input class="small" matInput readonly formControlName="impression_cap_daily">daily,  <input class="small" matInput readonly formControlName="impression_cap_monthly">monthly</span>
+        <span *ngIf="loading">Loading...</span>
+      </button>
+    </div>
+    <div class="full-width link-field">
+      <mat-label>Click Caps</mat-label>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      <button mat-flat-button type="button">
+        <span *ngIf="!loading"><input class="small" matInput readonly formControlName="click_cap_daily">daily, <input class="small" matInput readonly formControlName="click_cap_monthly">monthly</span>
+        <span *ngIf="loading">Loading...</span>
+      </button>
+    </div>
+    <mat-form-field class="full-width view">
+      <mat-label>Gender</mat-label>
+      <mat-select formControlName="gender_id">
+        <mat-option *ngFor="let gender of gendersData | async" [value]="gender.id">{{gender.name}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field class="full-width view">
+      <mat-label>Include</mat-label>
+      <mat-select formControlName="audiences_whitelisted" multiple>
+        <mat-select-trigger class="aud-wrapper">
+          <div class="aud-tag" *ngFor="let item of audiences_whitelisted.value">
+           {{item.audience_name}}
+          </div>
+        </mat-select-trigger>
+        <mat-option *ngFor="let aud of includeAudData" [value]="aud">{{aud.audience_name}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field class="full-width view">
+      <mat-label>Exclude</mat-label>
+      <mat-select formControlName="audiences_blacklisted" multiple>
+        <mat-select-trigger class="aud-wrapper">
+          <div class="aud-tag" *ngFor="let item of audiences_blacklisted.value">
+           {{item.audience_name}}
+          </div>
+        </mat-select-trigger>
+        <mat-option *ngFor="let aud of excludeAudData" [value]="aud">{{aud.audience_name}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <!-- <h3>Location</h3> -->
+    <h3>Location</h3>
+    <ng-select
+      class="custom view"
+      [items]="countriesData | async"
+      [markFirst]="false"
+      [hideSelected]="true"
+       bindLabel="name"
+       bindValue="id"
+       [multiple]="true"
+       [closeOnSelect]="true"
+       placeholder="Country"
+       [virtualScroll]="true"
+       formControlName="countries">
+    </ng-select>
+    <ng-select
+      *ngIf="(dmasData | async) && showDMA"
+      class="custom view"
+      [items]="dmasData | async"
+      [markFirst]="false"
+      [hideSelected]="true"
+       bindLabel="name"
+       [multiple]="true"
+       [closeOnSelect]="false"
+       placeholder="DMA"
+       [virtualScroll]="true"
+       formControlName="dmas">
+    </ng-select>
+    <ng-select
+      class="custom view"
+      [items]="regionsData | async"
+      [markFirst]="false"
+      [hideSelected]="true"
+       bindLabel="name"
+       [multiple]="true"
+       [closeOnSelect]="false"
+       placeholder="Region (depends on country select)"
+       [virtualScroll]="true"
+       formControlName="regions">
+    </ng-select>
+    <ng-select
+      class="custom view"
+      [items]="citiesData | async"
+      [markFirst]="false"
+      [hideSelected]="true"
+       bindLabel="name"
+       [multiple]="true"
+       [typeahead]="cityInput"
+       typeToSearchText="Type to search (min 2 characters)"
+       [closeOnSelect]="false"
+       placeholder="City (depends on country select)"
+       [virtualScroll]="true"
+       formControlName="cities">
+    </ng-select>
+    <ng-select
+      class="custom view"
+      [items]="pcodesData | async"
+      [markFirst]="false"
+      [hideSelected]="true"
+       bindLabel="code"
+       [multiple]="true"
+       [typeahead]="pcodeInput"
+       typeToSearchText="Type to search (min 2 characters)"
+       [closeOnSelect]="false"
+       placeholder="Postal Code (depends on country select)"
+       [virtualScroll]="true"
+       formControlName="postal_codes">
+    </ng-select>
+    <mat-form-field class="full-width">
+      <input type="number" matInput placeholder="Location Radius" formControlName="location_radius_target" readonly>
+    </mat-form-field>
+    <mat-expansion-panel *ngIf=location_targets.length > 0">
+      <mat-expansion-panel-header>
+        <mat-panel-title>These are the current lat/lng points (click to toggle).</mat-panel-title>
+      </mat-expansion-panel-header>
+      <div class="lat-lng-points">
+        <span class="configuration-label">
+          <table>
+            <thead>
+              <tr>
+                <th>Latitude</th>
+                <th>Longitude</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let coord of location_targets; let i = index">
+                <td>{{coord[0]}}</td>
+                <td>{{coord[1]}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </span>
+      </div>
+    </mat-expansion-panel>
+
+    <!-- <h3>Other</h3> -->
+    <h3>Other</h3>
+    <ng-select
+      class="custom view"
+      [items]="deviceTypesData | async"
+      [markFirst]="false"
+      [hideSelected]="true"
+       bindLabel="name"
+       bindValue="id"
+       [multiple]="true"
+       [closeOnSelect]="true"
+       placeholder="Device Type"
+       [virtualScroll]="true"
+       formControlName="device_types">
+    </ng-select>
+    <ng-select
+      class="custom view"
+      [items]="deviceModelsData | async"
+      [markFirst]="false"
+      [hideSelected]="true"
+       bindLabel="name"
+       [multiple]="true"
+       [closeOnSelect]="false"
+       placeholder="Device Model (depends on device type select)"
+       [virtualScroll]="true"
+       formControlName="device_models">
+    </ng-select>
+    <ng-select
+      class="custom view"
+      [items]="conTypesData | async"
+      [markFirst]="false"
+      [hideSelected]="true"
+       bindLabel="name"
+       bindValue="id"
+       [multiple]="true"
+       [closeOnSelect]="false"
+       placeholder="Connection Type"
+       [virtualScroll]="true"
+       formControlName="connection_types">
+    </ng-select>
+    <ng-select
+      class="custom view"
+      [items]="carriersData | async"
+      [markFirst]="false"
+      [hideSelected]="true"
+       bindLabel="name"
+       bindValue="id"
+       [multiple]="true"
+       [closeOnSelect]="false"
+       placeholder="Carrier"
+       [virtualScroll]="true"
+       formControlName="carriers">
+    </ng-select>
+    <ng-select
+      class="custom view"
+      [items]="osVersionsData | async"
+      [markFirst]="false"
+      [hideSelected]="true"
+       bindLabel="version"
+       bindValue="id"
+       [closeOnSelect]="false"
+       placeholder="Min OS Version"
+       [virtualScroll]="true"
+       [multiple]="true"
+       formControlName="os_versions">
+    </ng-select>
+    <mat-form-field class="full-width view">
+      <mat-label>Reward</mat-label>
+        <mat-select formControlName="reward_target" readonly>
+          <mat-option value="all">All</mat-option>
+          <mat-option value="non-rewarded">Non-rewarded</mat-option>
+          <mat-option value="rewarded">Rewarded</mat-option>
+        </mat-select>
+    </mat-form-field>
+    <ng-select
+      class="custom view"
+      [items]="exchangesData | async"
+      [markFirst]="false"
+      [hideSelected]="true"
+       bindLabel="name"
+       bindValue="public_identifier"
+       [closeOnSelect]="false"
+       placeholder="Exchages"
+       [virtualScroll]="true"
+       [multiple]="true"
+       formControlName="exchanges">
+    </ng-select>
+    <mat-form-field class="full-width view">
+      <mat-label>Traffic Type</mat-label>
+        <mat-select formControlName="traffic_type_target" readonly>
+          <mat-option value="all">All</mat-option>
+          <mat-option value="app">In-product</mat-option>
+          <mat-option value="web">Web</mat-option>
+        </mat-select>
+    </mat-form-field>
+
+    <!-- Publisher Lists -->
+    <mat-form-field class="full-width view">
+      <mat-label>Include Publisher Lists</mat-label>
+      <mat-select formControlName="publisher_lists_whitelisted" multiple>
+        <mat-select-trigger class="aud-wrapper">
+          <div class="aud-tag" *ngFor="let item of publisher_lists_whitelisted.value">
+           {{item.name}}
+          </div>
+        </mat-select-trigger>
+        <mat-option *ngFor="let list of includePubListData" [value]="list">
+          <mat-icon class="muted" matTooltip="Global" *ngIf="list.is_global">share</mat-icon>{{list.name}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field class="full-width view">
+      <mat-label>Exclude Publisher Lists</mat-label>
+      <mat-select formControlName="publisher_lists_blacklisted" multiple>
+        <mat-select-trigger class="aud-wrapper">
+          <div class="aud-tag" *ngFor="let item of publisher_lists_blacklisted.value">
+           {{item.name}}
+          </div>
+        </mat-select-trigger>
+        <mat-option *ngFor="let list of excludePubListData" [value]="list">
+          <mat-icon class="muted" matTooltip="Global" *ngIf="list.is_global">share</mat-icon>{{list.name}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <!--  -->
+    
+    <mat-form-field class="full-width">
+      <input matInput readonly placeholder="Category Selection" value="Included: {{categories_whitelisted.value && categories_whitelisted.value.length}} categories">
+    </mat-form-field>
+    <mat-form-field class="full-width">
+      <input matInput readonly placeholder="Category Selection" value="Excluded: {{categories_blacklisted.value && categories_blacklisted.value.length}} categories">
+    </mat-form-field>
+    <div class="form-element">
+      <button type="button" mat-raised-button class="button" (click)="redirect()">OK</button>
+    </div>
+
+  </form>
+</div>

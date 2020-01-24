@@ -1,0 +1,27 @@
+<h1 mat-dialog-title>{{toSave.id ? 'Edit': 'New'}} External Audience</h1>
+<div class="dialog-container">
+<form>
+  <mat-form-field class="full-width">
+    <input required type="text" matInput placeholder="Audience Name" [formControl]="nameFormControl">
+  </mat-form-field>
+  <mat-form-field class="full-width" *ngIf="!toSave.id">
+    <input placeholder="Platform" matInput value={{toSave.device_type}} [disabled]=true>
+  </mat-form-field>
+  <div class="toggle"><mat-slide-toggle [disabled]="loading" [checked]="toSave.create_fiksu_lookalike" (change)="toSave.create_fiksu_lookalike = $event.checked;" labelPosition="before">Fiksu Lookalike</mat-slide-toggle></div>
+  <mat-form-field class="full-width" *ngIf="toSave.create_fiksu_lookalike">
+    <mat-label>Audience Size</mat-label>
+    <mat-select [disabled]="loading" [(value)]="toSave.lookalike_size_id">
+      <mat-option *ngFor="let asize of sizes" [value]="asize.id">
+      {{asize.short_name}}%
+    </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <div mat-dialog-actions>
+    <button mat-button type="button" [mat-dialog-close]>Cancel</button>
+    <button mat-button type="button" (click)="createAud(false)" *ngIf="!loading && !toSave.id" color="primary" [disabled]="nameFormControl.invalid">Create</button>
+    <button mat-button type="button" (click)="updateAud()" *ngIf="!loading && toSave.id" color="primary" [disabled]="nameFormControl.invalid">Update</button>
+    <button mat-button type="button" (click)="createAud(true)" *ngIf="!loading && !toSave.id" color="primary" [disabled]="nameFormControl.invalid">Create & Upload</button>
+    <button mat-button type="buttom" *ngIf="loading" color="primary" [disabled]=true>Updating...</button>
+  </div>
+</form>
+</div>

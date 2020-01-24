@@ -1,0 +1,13 @@
+<div class="select-container">
+  <ng-select class="client-select" [items]="clientsData"
+             bindLabel="name"
+             placeholder="Client"
+             [virtualScroll]="true"
+             [loading]="loading"
+             [clearable]="false"
+             [clearOnBackspace]="false"
+             [markFirst]="false"
+             (change)="clientChanged()"
+             [(ngModel)]="selectedClient">
+  </ng-select>
+</div>

@@ -1,0 +1,47 @@
+.table-container {
+  overflow-x: auto;
+  padding-bottom: 39px;
+  overflow-y: hidden;
+}
+.menu-wrapper {
+  position: relative;
+}
+.muted-icon {
+  font-size: 16px;
+  margin-left: 6px;
+  font-weight: bold;
+  width: 0;
+  height: 0;
+  color: lightgrey;
+}
+div.wicon {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+.fiksu-menu {
+    position: absolute;
+    bottom: -30px;
+    left: 50%;
+    z-index: 1;
+    transform: translate(-50%, 0);
+    padding: 0 10px;
+    min-width: 120px;
+    color: #445e7a;
+    svg {
+      width: 20px;
+      margin-right: 6px;
+      fill: #445e7a;
+    }
+    &.muted {
+      color: lightgrey;
+      svg {
+        fill: lightgrey;
+      }
+    }
+}
+
+.flex-right-align {
+      padding: 10px;
+    margin-right: 10px;
+}

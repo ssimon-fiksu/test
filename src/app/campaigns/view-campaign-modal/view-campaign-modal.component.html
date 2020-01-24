@@ -1,0 +1,37 @@
+<h1 mat-dialog-title>View Campaign</h1>
+<div class="dialog-container">
+<form [formGroup]="formGroup" novalidate autocomplete="off">
+  <mat-form-field class="full-width">
+    <input type="text" readonly matInput placeholder="Campaign Name"  formControlName="name">
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput placeholder="Start date" readonly formControlName="start_date" />
+  </mat-form-field>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  <mat-form-field>
+    <input matInput placeholder="End date" readonly formControlName="end_date">
+  </mat-form-field>
+  <mat-form-field class="full-width">
+    <input type="number" matInput readonly placeholder="Budget" formControlName="budget">
+  </mat-form-field>
+  <div class="full-width link-field">
+    <mat-label>Impression Caps</mat-label>
+    &nbsp;
+    <button mat-flat-button type="button">
+      <span *ngIf="!loading"><input class="small" matInput readonly formControlName="impression_cap_hourly">hourly, <input class="small" matInput readonly formControlName="impression_cap_daily">daily,  <input class="small" matInput readonly formControlName="impression_cap_monthly">monthly</span>
+      <span *ngIf="loading">Loading...</span>
+    </button>
+  </div>
+  <div class="full-width link-field">
+    <mat-label>Click Caps</mat-label>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <button mat-flat-button type="button">
+      <span *ngIf="!loading"><input class="small" matInput readonly formControlName="click_cap_daily">daily, <input class="small" matInput readonly formControlName="click_cap_monthly">monthly</span>
+      <span *ngIf="loading">Loading...</span>
+    </button>
+  </div>
+  <div mat-dialog-actions>
+    <button mat-flat-button type="button" color="primary" [mat-dialog-close]>OK</button>
+  </div>
+</form>
+</div>

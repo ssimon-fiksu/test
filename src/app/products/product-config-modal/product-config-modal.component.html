@@ -1,0 +1,47 @@
+<h1 mat-dialog-title>Product Configuration</h1>
+<div class="dialog-container">
+<form [formGroup]="formGroup" novalidate autocomplete="off">
+  <mat-form-field class="full-width">
+    <input type="text" matInput placeholder="Impression URL" formControlName="impression_url" [errorStateMatcher]="matcher">
+    <mat-error *ngIf="impression_url.hasError('pattern')">This field must be an URL</mat-error>
+  </mat-form-field>
+  <span  *ngIf="data.type != 'brand'">
+    <mat-form-field class="full-width">
+      <input type="text" matInput placeholder="Click URL" required formControlName="click_url" [errorStateMatcher]="matcher">
+      <mat-error *ngIf="click_url.hasError('pattern')">This field must be an URL</mat-error>
+    </mat-form-field>
+    <br>
+    <mat-chip-list>
+      <mat-chip *ngFor="let mac of macroses" (click)="clickChip(mac)">{{mac}}</mat-chip>
+    </mat-chip-list>
+    <br>
+    <mat-checkbox  formControlName="is_async_click">Async Click</mat-checkbox>
+    <br>
+    <br>
+  </span>
+  <mat-form-field class="full-width">
+    <input type="number" matInput placeholder="Min Allowed Age" aria-label="Min Allowed Age" required formControlName="min_allowed_age" [errorStateMatcher]="matcher">
+    <mat-error *ngIf="min_allowed_age.hasError('max')">Max value can be 127</mat-error>
+  </mat-form-field>
+  <div class="full-width link-field">
+    <mat-label>Tracking Partner</mat-label>
+    &nbsp;
+    <button mat-flat-button type="button" (click)="partnerModalOpen()" style="line-height: 37px;">
+      <span *ngIf="!loading && !selectedPartner">Partner not selected</span>
+      <span *ngIf="!loading && selectedPartner">{{selectedPartner.name}}</span>
+      <span *ngIf="loading">Loading...</span>
+    </button>
+  </div>
+  <mat-form-field class="full-width">
+    <input matInput readonly placeholder="Category Selection" value="Selected: {{category_ids.value && category_ids.value.length}} categories">
+  </mat-form-field>
+  <div class="categories">
+    <ng-container *ngFor="let cat of cats"><button *ngIf="cat.enabled" [disabled]="catsObj == undefined" type="button" mat-stroked-button  (click)="openCategories(cat)">{{cat.name}}</button></ng-container>
+  </div>
+  <div mat-dialog-actions>
+    <button mat-button type="button" [mat-dialog-close]>Cancel</button>
+    <button mat-button type="submit" *ngIf="!loading" color="primary" (click)="save()">Confirm</button>
+    <button mat-button type="buttom" *ngIf="loading" color="primary" [disabled]=true>...</button>
+  </div>
+</form>
+</div>

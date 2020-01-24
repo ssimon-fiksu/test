@@ -1,0 +1,50 @@
+<div class="client-selector-header">
+  <mat-toolbar color="primary">
+    <mat-toolbar-row>
+      <span>Products</span> 
+    </mat-toolbar-row>
+  </mat-toolbar>
+  <app-client-selector></app-client-selector>
+</div>
+<div class="section main-container">
+  <app-advertiser-selector></app-advertiser-selector>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  <mat-form-field *ngIf="dataSource.data.length > 0">
+    <input autocomplete="off" matInput #searchName (keyup)="applyFilter($event.target.value)" placeholder="Filter products by name" [disabled]="loading">
+  </mat-form-field>
+  <div class="flex-right-align"  *ngIf="dataSource.data.length > 0">
+    <button [disabled]="loading" *ngxPermissionsOnly="['application creator']" mat-raised-button color="primary" (click)="createProduct()">Add product</button>
+  </div>
+</div>
+<app-spinner *ngIf="loading"></app-spinner>
+<div class="table-container">
+  <table *ngIf="!loading && dataSource.data.length > 0" mat-table [dataSource]="dataSource" matSort class="main-table" matSortActive="application_name" matSortDirection="asc" matSortDisableClear="true" id="product-table">
+
+  <ng-container matColumnDef="application_name">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> Product </th>
+    <td mat-cell class="align-left" *matCellDef="let product">{{product.application_name}}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="type">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> Type </th>
+    <td mat-cell class="small-cell" *matCellDef="let product" class="nowrap"> {{product.type}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="actions">
+    <th mat-header-cell *matHeaderCellDef>Action</th>
+    <td mat-cell class="small-cell" *matCellDef="let product; let i = index" class="nowrap">
+      <ng-container><mat-icon matTooltip="Configuration" *ngxPermissionsOnly="['application editor']" (click)="productSettings(product)">settings</mat-icon></ng-container>
+      <ng-container *ngxPermissionsExcept="['application editor']"><mat-icon matTooltip="Configuration" *ngxPermissionsOnly="['application viewer']" (click)="viewProduct(product)">settings</mat-icon></ng-container>
+      <ng-container *ngIf="product.type != 'brand'"><mat-icon matTooltip="Events" *ngxPermissionsOnly="['events setup', 'events viewer']" (click)="eventsSettings(product)">event_note</mat-icon></ng-container>
+    </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+  <div *ngIf="!loading && dataSource.data.length === 0 && selectedAdv" class="call-to-action-card">
+    <img src="/assets/empty-audiences.png" width="100" height="100" />
+    <div class="header">There are no products yet. Please create a new one.</div>
+    <button [disabled]="loading" *ngxPermissionsOnly="['application creator']" mat-raised-button color="primary" (click)="createProduct()">New product</button>
+ </div>
+</div>

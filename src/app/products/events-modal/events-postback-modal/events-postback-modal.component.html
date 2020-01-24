@@ -1,0 +1,13 @@
+<h1 mat-dialog-title>Postback for {{name}} event</h1>
+<div mat-dialog-content>
+  <app-spinner *ngIf="loading"></app-spinner>
+  <p *ngIf="!loading && postback">{{postback}}</p>
+  <p *ngIf="!loading && !postback">Please set partner for this product to get Postback url</p>
+  <div class="text-center" #container *ngIf="postback">
+    <button mat-raised-button ngxClipboard [cbContent]="postback" [container]="container">Copy to Clipboard</button>
+  </div>
+  <br>
+</div>
+<div mat-dialog-actions *ngIf="!loading">
+    <button mat-flat-button type="button" color="primary" [mat-dialog-close]>Close</button>
+</div>

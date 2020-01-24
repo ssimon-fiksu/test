@@ -1,0 +1,35 @@
+<h1 mat-dialog-title>Campaign Name: {{campInfo.campaign_name}}</h1>
+<app-spinner *ngIf="loading"></app-spinner>
+<div class="dialog-container" id="camp-info">
+  <div><label>Access Mode:</label><span>{{campInfo.campaign_mode_name}}</span></div>
+  <div><label>Tracking Type:</label><span>{{campInfo.tracking_type_name}}</span></div>
+  <div><label>Campaign Pricing:</label><span>{{campInfo.pricing_model_name}}</span></div>
+  <div><label>Pacing Enabled:</label><span>{{campInfo.is_pacing_enabled}}</span></div>
+  <div><label>Reward Targeting:</label><span>{{campInfo.reward_target}}</span></div>
+  <div><label>Media Fee:</label><span>${{campInfo.media_fee_percent | number:'1.2-2'}}</span></div>
+  <div><label>Client Bid:</label><span>${{campInfo.client_price | number:'1.2-2'}}</span></div>
+  <div><label>Client Daily Budget:</label><span>${{campInfo.client_budget_dollars | number:'1.2-2'}}</span></div>
+  <div><label>Bid:</label><span>{{campInfo.bid_allocator_type_name}}</span></div>
+  <div><label>Bid Strategy:</label><span>{{campInfo.campaign_bidding_strategy}} ${{campInfo.campaign_bidding_value}}</span></div>
+  <div><label>Daily Budget:</label><span>{{campInfo.budget_allocator_type_name}} ${{campInfo.client_budget_dollars}}</span></div>
+  <div><label>Optimization Daily Budget:</label><span>${{campInfo.daily_budget_optimization_dollars}}</span></div>
+  <div><label>Exploration Daily Budget:</label><span>${{campInfo.daily_budget_exploration_dollars}}</span></div>
+  <div><label>Click URL:</label><span>{{campInfo.default_click_url}}</span></div>
+  <div><label>Default Client Impression URL:</label><span>{{campInfo.default_impression_beacon}}</span></div>
+  <div><label>Platform Targets:</label><span>{{campInfo.platform_targets}}</span></div>
+  <div><label>Device Targets:</label><span>{{campInfo.device_targets.length > 0 ? campInfo.device_targets : "All"}}</span></div>
+  <div><label>Device Model Targets:</label><span>{{campInfo.device_model_targets || "All"}}</span></div>
+  <div><label>Whitelisted Audiences:</label><span>{{campInfo.whitelisted_audiences}}</span></div>
+  <div><label>Blacklisted Audiences:</label><span>{{campInfo.blacklisted_audiences}}</span></div>
+  <div><label>Minimum OS Version Targets:</label><span>{{campInfo.minimum_os_version_targets}}</span></div>
+  <div><label>Carrier Targets:</label><span>{{campInfo.carrier_targets}}</span></div>
+  <div><label>Country Targets:</label><span>{{campInfo.country_targets}}</span></div>
+</div>
+<div mat-dialog-actions>
+  <button mat-raised-button type="button" [mat-dialog-close]>Close</button>
+</div>
+
+
+
+
+

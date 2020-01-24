@@ -1,0 +1,48 @@
+<mat-toolbar>
+  <h1 mat-dialog-title>{{data.name}}</h1>
+</mat-toolbar>
+<div class="dialog-container">
+  <div class="cat-container">
+    <mat-list>
+      <mat-list-item><span class="heading">Include</span>&nbsp;&nbsp;&nbsp;<span class="heading">Exclude</span></mat-list-item>
+      <ng-container *ngFor="let cat of cats">
+        <mat-list-item class="check-inc-excl">
+          <div>
+            <mat-checkbox matTooltip="Include" class="margin" [disabled]="selected[cat.public_identifier].excluded" [(ngModel)]="selected[cat.public_identifier].included"></mat-checkbox>
+            <mat-checkbox matTooltip="Exclude" class="margin" [disabled]="selected[cat.public_identifier].included" [(ngModel)]="selected[cat.public_identifier].excluded"></mat-checkbox>
+          </div>
+        </mat-list-item>
+        <mat-list style="margin-left:20px;" *ngIf="cat.child_categories && cat.child_categories.length > 0 && cat.open">
+          <div *ngFor="let subcat of cat.child_categories">
+            <mat-list-item>
+              <div>
+                <mat-checkbox matTooltip="Include"  class="margin" [disabled]="selected[subcat.public_identifier].excluded" [(ngModel)]="selected[subcat.public_identifier].included"></mat-checkbox>
+                <mat-checkbox matTooltip="Exclude" class="margin" [disabled]="selected[subcat.public_identifier].included" [(ngModel)]="selected[subcat.public_identifier].excluded"></mat-checkbox>
+              </div>
+            </mat-list-item>
+          </div>
+        </mat-list>
+      </ng-container>
+    </mat-list>
+    <mat-list>
+      <mat-list-item><span class="heading">&nbsp;&nbsp;&nbsp;</span></mat-list-item>
+      <ng-container *ngFor="let cat of cats">
+        <mat-list-item [ngClass]="{'pick-cursor': cat.child_categories && cat.child_categories.length > 0}">
+            <span (click)="cat.open = cat.open ? !cat.open : true">{{cat.name}}</span>
+            <mat-icon (click)="cat.open = cat.open ? !cat.open : true" *ngIf="cat.child_categories && cat.child_categories.length > 0 && !cat.open">keyboard_arrow_right</mat-icon>
+            <mat-icon (click)="cat.open = cat.open ? !cat.open : true" *ngIf="cat.child_categories && cat.child_categories.length > 0 && cat.open">keyboard_arrow_down</mat-icon>
+        </mat-list-item>
+        <mat-list style="margin-left:20px;" *ngIf="cat.child_categories && cat.child_categories.length > 0 && cat.open">
+          <div *ngFor="let subcat of cat.child_categories">
+           <mat-list-item> {{subcat.name}} </mat-list-item>
+         </div>
+       </mat-list>
+     </ng-container>
+   </mat-list>
+  </div>
+  <mat-divider></mat-divider>
+  <div mat-dialog-actions>
+    <button mat-button type="button" [mat-dialog-close]>Cancel</button>
+    <button mat-button type="submit" *ngIf="!loading" color="primary" (click)="ok()">Ok</button>
+  </div>
+</div>

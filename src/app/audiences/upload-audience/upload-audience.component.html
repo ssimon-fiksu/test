@@ -1,0 +1,32 @@
+<h1 mat-dialog-title>Upload Audience</h1>
+<div class="dialog-container" id="aud-upload">
+  <form>
+    <mat-radio-group [(ngModel)]="uploadType" class="radio-group" name="uploadType">
+      <mat-radio-button class="radio-button" value="file">
+        File
+        <button [disabled]="uploadType == 'link'" mat-stroked-button (click)="error = false; fileInput.click()">Browse</button>
+        <input accept="product/x-gzip" hidden multiple="false" type="file" #fileInput (change)="handleFileInput($event.target.files)">
+        <span *ngIf="file" class="file-name"><div>{{file.name}}</div></span>
+      </mat-radio-button>
+      <mat-error *ngIf="!file && error && uploadType == 'file'">Please atach file to upload</mat-error>
+      <mat-radio-button class="radio-button" value="link">S3 Link</mat-radio-button>
+    </mat-radio-group>
+    <mat-form-field class="full-width" *ngIf="uploadType == 'link'">
+       <input matInput type="text" placeholder="s3 link" [formControl]="linkFormControl">
+       <mat-error *ngIf="linkFormControl.hasError('required')">This field is required</mat-error>
+       <mat-error *ngIf="linkFormControl.hasError('pattern')">Link must start with s3://</mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Mode</mat-label>
+      <mat-select [(value)]="mode">
+        <mat-option value="ADD">iter-add</mat-option>
+        <mat-option value="REMOVE">iter-delete</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <div mat-dialog-actions>
+      <button mat-button type="button" [mat-dialog-close]>Cancel</button>
+      <button mat-button type="submit" *ngIf="!loading" color="primary" (click)="upload()">Upload</button>
+      <button mat-button type="buttom" *ngIf="loading" color="primary" [disabled]=true>Saving...</button>
+    </div>
+  </form>
+</div>
